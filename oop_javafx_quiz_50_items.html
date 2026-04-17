@@ -377,6 +377,10 @@
             <label>&nbsp;</label>
             <button id="resetProgress" type="button">Reset Progress</button>
           </div>
+          <div class="field">
+            <label>&nbsp;</label>
+            <button id="revealAll" type="button">Reveal All Answers</button>
+          </div>
         </div>
       </div>
 
@@ -637,6 +641,10 @@
     document.getElementById('applyFilters').addEventListener('click', applyFilters);
     document.getElementById('resetProgress').addEventListener('click', () => {
       answers.clear();
+      renderQuestions();
+    });
+    document.getElementById('revealAll').addEventListener('click', () => {
+      currentQuestions.forEach(question => answers.set(question.id, question.correct_choice_index));
       renderQuestions();
     });
 
