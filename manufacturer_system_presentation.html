@@ -233,6 +233,7 @@
   }
 
   .slide-content { position: relative; z-index: 2; width: 100%; max-width: 1100px; }
+  #slide-2b .slide-content { max-width: 1320px; }
 
   .slide-label {
     font-family: 'DM Mono', monospace;
@@ -358,6 +359,347 @@
     border-radius: 4px;
     padding: 0.2rem 0.5rem;
     text-transform: uppercase;
+  }
+
+  .diagram-grid {
+    display: block;
+    width: 100%;
+  }
+  .diagram-box {
+    background: rgba(10,37,64,0.65);
+    border: 1px solid rgba(0,212,255,0.15);
+    border-radius: 20px;
+    padding: 1.6rem;
+    backdrop-filter: blur(12px);
+    min-height: 100%;
+  }
+  .diagram-title-sm {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.68rem;
+    letter-spacing: 0.24em;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.6);
+    margin-bottom: 1rem;
+  }
+  .diagram-sheet {
+    background: linear-gradient(180deg, rgba(255,255,255,0.04), rgba(255,255,255,0.02));
+    border: 1px solid rgba(0,212,255,0.12);
+    border-radius: 22px;
+    padding: 1.35rem;
+    box-shadow: inset 0 0 0 1px rgba(255,255,255,0.025);
+    overflow: hidden;
+  }
+  .diagram-stage {
+    display: flex;
+    flex-direction: column;
+    gap: 2.1rem;
+  }
+  .conceptual-model,
+  .logical-model {
+    display: grid;
+    align-items: center;
+  }
+  .conceptual-model {
+    grid-template-columns: minmax(140px, 1fr) minmax(120px, 0.82fr) minmax(140px, 1fr) minmax(120px, 0.82fr) minmax(140px, 1fr);
+    column-gap: 1.35rem;
+  }
+  .entity-card,
+  .relation-diamond {
+    position: relative;
+    min-height: 116px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .entity-box {
+    width: 100%;
+    min-height: 92px;
+    border-radius: 10px;
+    border: 1.5px solid rgba(148,227,255,0.78);
+    background: rgba(7,26,47,0.72);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 1rem;
+    box-shadow: inset 0 0 0 1px rgba(255,255,255,0.03);
+  }
+  .entity-name,
+  .relation-diamond span,
+  .table-head {
+    font-family: 'DM Sans', sans-serif;
+    font-weight: 700;
+    letter-spacing: 0.02em;
+    color: var(--white);
+  }
+  .entity-name,
+  .relation-diamond span {
+    font-size: 0.78rem;
+    text-transform: uppercase;
+  }
+  .relation-diamond::before,
+  .relation-diamond::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    width: calc(50% - 40px);
+    height: 1.5px;
+    background: rgba(148,227,255,0.62);
+  }
+  .relation-diamond::before { left: 0; }
+  .relation-diamond::after { right: 0; }
+  .relation-shape {
+    width: 74px;
+    height: 74px;
+    transform: rotate(45deg);
+    border-radius: 12px;
+    border: 1.5px solid rgba(148,227,255,0.78);
+    background: rgba(7,26,47,0.72);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: inset 0 0 0 1px rgba(255,255,255,0.03);
+  }
+  .relation-diamond span {
+    transform: rotate(-45deg);
+  }
+  .logical-model {
+    grid-template-columns: minmax(126px, 0.95fr) 28px minmax(156px, 1.1fr) 28px minmax(126px, 0.95fr) 28px minmax(164px, 1.12fr) 28px minmax(126px, 0.95fr);
+    column-gap: 0.55rem;
+    width: 100%;
+  }
+  .logical-connector {
+    position: relative;
+    height: 2px;
+    background: rgba(148,227,255,0.62);
+    min-width: 20px;
+    align-self: center;
+    opacity: 0.9;
+  }
+  .table-card {
+    border-radius: 12px;
+    border: 1.5px solid rgba(148,227,255,0.78);
+    background: rgba(7,26,47,0.72);
+    overflow: hidden;
+    box-shadow: inset 0 0 0 1px rgba(255,255,255,0.03);
+    min-width: 0;
+  }
+  .table-head {
+    min-height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.45rem 0.55rem;
+    border-bottom: 1.5px solid rgba(148,227,255,0.58);
+    font-size: 0.64rem;
+    text-transform: uppercase;
+    text-align: center;
+    line-height: 1.15;
+  }
+  .table-body {
+    display: grid;
+    grid-template-columns: 44px minmax(0, 1fr);
+    min-height: 72px;
+  }
+  .table-key {
+    border-right: 1.5px solid rgba(148,227,255,0.58);
+    padding: 0.5rem 0.25rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.45rem;
+    font-family: 'DM Mono', monospace;
+    font-size: 0.63rem;
+    color: rgba(233,248,255,0.92);
+    text-transform: uppercase;
+    text-align: center;
+  }
+  .table-fields {
+    padding: 0.5rem 0.45rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.38rem;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.56rem;
+    color: rgba(233,248,255,0.94);
+    line-height: 1.12;
+    min-width: 0;
+    overflow: hidden;
+  }
+  .table-fields span {
+    display: block;
+    min-width: 0;
+    overflow-wrap: anywhere;
+    word-break: break-word;
+  }
+  .schema-preview {
+    margin-top: 1.6rem;
+    display: grid;
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+    gap: 1rem;
+  }
+  .schema-card {
+    border-radius: 14px;
+    border: 1px solid rgba(0,212,255,0.16);
+    background: rgba(6,22,41,0.5);
+    padding: 0.85rem 0.9rem 0.95rem;
+    min-width: 0;
+  }
+  .schema-title {
+    font-family: 'DM Sans', sans-serif;
+    font-weight: 700;
+    font-size: 0.7rem;
+    letter-spacing: 0.04em;
+    color: var(--white);
+    text-transform: uppercase;
+    margin-bottom: 0.75rem;
+  }
+  .schema-rows {
+    display: flex;
+    flex-direction: column;
+    gap: 0.38rem;
+  }
+  .schema-row {
+    display: grid;
+    grid-template-columns: 48px minmax(0, 1fr);
+    gap: 0.4rem;
+    font-family: 'DM Mono', monospace;
+    font-size: 0.59rem;
+    line-height: 1.35;
+    color: var(--blue-100);
+  }
+  .schema-row span:last-child {
+    min-width: 0;
+    overflow-wrap: anywhere;
+    word-break: break-word;
+  }
+  .schema-row span:first-child {
+    color: rgba(255,255,255,0.62);
+  }
+
+  #slide-2b {
+    background: linear-gradient(160deg, #051226 0%, #071b32 45%, #020b18 100%);
+  }
+  #slide-2b .glow-orb.a {
+    width: 520px; height: 520px;
+    background: radial-gradient(circle, #0068c6 0%, transparent 68%);
+    top: -15%; left: -5%;
+  }
+  #slide-2b .glow-orb.b {
+    width: 340px; height: 340px;
+    background: radial-gradient(circle, #00d4ff 0%, transparent 70%);
+    bottom: 10%; right: 4%;
+    opacity: 0.16;
+  }
+  #slide-2a {
+    background: radial-gradient(circle at 18% 18%, rgba(0,212,255,0.12), transparent 22%),
+                linear-gradient(160deg, #041021 0%, #071a31 55%, #020b18 100%);
+  }
+  #slide-2a .glow-orb.a {
+    width: 520px; height: 520px;
+    background: radial-gradient(circle, #005eae 0%, transparent 68%);
+    top: -12%; left: -8%;
+  }
+  #slide-2a .glow-orb.b {
+    width: 320px; height: 320px;
+    background: radial-gradient(circle, #00d4ff 0%, transparent 72%);
+    bottom: 8%; right: 6%;
+    opacity: 0.18;
+  }
+  .section-hero {
+    position: relative;
+    z-index: 2;
+    width: min(100%, 1120px);
+    display: grid;
+    grid-template-columns: minmax(0, 1.15fr) minmax(320px, 0.85fr);
+    gap: 3rem;
+    align-items: center;
+  }
+  .section-hero-copy {
+    max-width: 640px;
+  }
+  .section-kicker {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.72rem;
+    letter-spacing: 0.28em;
+    color: var(--accent);
+    text-transform: uppercase;
+    margin-bottom: 1.2rem;
+  }
+  .section-title {
+    font-family: 'DM Sans', sans-serif;
+    font-size: clamp(2.4rem, 5vw, 4.4rem);
+    line-height: 0.98;
+    letter-spacing: -0.03em;
+    font-weight: 700;
+    color: var(--white);
+    margin-bottom: 1.15rem;
+  }
+  .section-title span {
+    display: block;
+    color: var(--accent);
+  }
+  .section-desc {
+    font-size: 1rem;
+    line-height: 1.7;
+    color: var(--blue-100);
+    max-width: 52ch;
+    margin-bottom: 2rem;
+  }
+  .section-meta-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.8rem;
+  }
+  .section-pill {
+    padding: 0.55rem 0.95rem;
+    border-radius: 999px;
+    border: 1px solid rgba(0,212,255,0.24);
+    background: rgba(0,212,255,0.05);
+    font-family: 'DM Mono', monospace;
+    font-size: 0.68rem;
+    letter-spacing: 0.08em;
+    color: var(--blue-100);
+    text-transform: uppercase;
+  }
+  .section-panel {
+    border-radius: 24px;
+    border: 1px solid rgba(0,212,255,0.16);
+    background: rgba(6,22,41,0.58);
+    padding: 1.75rem;
+    backdrop-filter: blur(12px);
+    box-shadow: inset 0 0 0 1px rgba(255,255,255,0.025);
+  }
+  .section-panel-title {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.68rem;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.62);
+    margin-bottom: 1rem;
+  }
+  .section-panel-grid {
+    display: grid;
+    gap: 0.9rem;
+  }
+  .section-panel-item {
+    border-radius: 16px;
+    border: 1px solid rgba(0,212,255,0.14);
+    background: rgba(2,11,24,0.46);
+    padding: 1rem 1.05rem;
+  }
+  .section-panel-item strong {
+    display: block;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.95rem;
+    color: var(--white);
+    margin-bottom: 0.4rem;
+  }
+  .section-panel-item span {
+    display: block;
+    font-family: 'DM Mono', monospace;
+    font-size: 0.72rem;
+    line-height: 1.7;
+    color: var(--blue-100);
   }
 
   /* ─── SLIDE 3: PRODUCTS ─── */
@@ -706,11 +1048,49 @@
       font-size: clamp(3rem, 10vw, 6rem);
       max-width: min(100%, 20ch);
     }
+    .section-hero {
+      grid-template-columns: 1fr;
+    }
+    .diagram-grid {
+      display: block;
+    }
+    .logical-model {
+      grid-template-columns: 1fr;
+      row-gap: 0.8rem;
+    }
+    .logical-connector {
+      height: 22px;
+      width: 2px;
+      margin: 0 auto;
+    }
+    .schema-preview {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+
+  @media (min-width: 1025px) and (max-width: 1280px) {
+    .schema-preview {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
   }
 
   @media (max-width: 768px) {
     .two-col, .three-col { grid-template-columns: 1fr; }
     .stat-row { grid-template-columns: 1fr 1fr; }
+    .section-title {
+      font-size: clamp(2rem, 10vw, 3rem);
+    }
+    .conceptual-model {
+      grid-template-columns: 1fr;
+      row-gap: 0.9rem;
+    }
+    .relation-diamond::before,
+    .relation-diamond::after {
+      display: none;
+    }
+    .schema-preview {
+      grid-template-columns: 1fr;
+    }
   }
 </style>
 </head>
@@ -725,6 +1105,8 @@
   <div class="nav-dot" onclick="goTo(2)"></div>
   <div class="nav-dot" onclick="goTo(3)"></div>
   <div class="nav-dot" onclick="goTo(4)"></div>
+  <div class="nav-dot" onclick="goTo(5)"></div>
+  <div class="nav-dot" onclick="goTo(6)"></div>
 </nav>
 
 <!-- ═══════════════════════════════════════════ SLIDE 1: HERO -->
@@ -847,6 +1229,190 @@
   </div>
 </section>
 
+<!-- ═══════════════════════════════════════════ SLIDE 2A: DATA MODEL TITLE -->
+<section class="slide" id="slide-2a">
+  <div class="grid-overlay"></div>
+  <div class="glow-orb a"></div>
+  <div class="glow-orb b"></div>
+
+  <div class="section-hero">
+    <div class="section-hero-copy">
+      <div class="speaker-badge reveal">
+        <div class="speaker-dot"></div>
+        <span class="speaker-name">Speaker — Reign</span>
+      </div>
+      <div class="section-kicker reveal reveal-delay-1">02 / Data Model</div>
+      <h2 class="section-title reveal reveal-delay-2">Manufacturer System<span>Data Model</span></h2>
+      <p class="section-desc reveal reveal-delay-3">This section introduces the structure behind the project: the high-level conceptual flow, the table relationships, and the schema fields that support the CRUD pages.</p>
+      <div class="section-meta-row reveal reveal-delay-4">
+        <span class="section-pill">Conceptual View</span>
+        <span class="section-pill">Logical Model</span>
+        <span class="section-pill">Schema Details</span>
+      </div>
+    </div>
+
+    <div class="section-panel reveal reveal-delay-3">
+      <div class="section-panel-title">What This Slide Covers</div>
+      <div class="section-panel-grid">
+        <div class="section-panel-item">
+          <strong>Core Entities</strong>
+          <span>PRODUCT, COMPONENT, and SUPPLIER define the main records tracked by the app.</span>
+        </div>
+        <div class="section-panel-item">
+          <strong>Bridge Tables</strong>
+          <span>PRODUCT_COMPONENT and SUPPLIER_COMPONENT map the many-to-many relationships cleanly.</span>
+        </div>
+        <div class="section-panel-item">
+          <strong>Database Intent</strong>
+          <span>The structure is built to keep the UI simple while keeping the data connected and extensible.</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════ SLIDE 2B: DATA MODEL -->
+<section class="slide" id="slide-2b">
+  <div class="grid-overlay"></div>
+  <div class="glow-orb a"></div>
+  <div class="glow-orb b"></div>
+
+  <div class="slide-content">
+    <div class="diagram-grid">
+      <div class="diagram-box reveal reveal-delay-2">
+        <div class="diagram-title-sm">Reference Diagrams</div>
+        <div class="diagram-sheet">
+          <div class="diagram-stage">
+            <div>
+              <div class="diagram-title-sm">Conceptual Model</div>
+              <div class="conceptual-model">
+                <div class="entity-card"><div class="entity-box"><span class="entity-name">PRODUCT</span></div></div>
+                <div class="relation-diamond"><div class="relation-shape"><span>REQUIRES</span></div></div>
+                <div class="entity-card"><div class="entity-box"><span class="entity-name">COMPONENT</span></div></div>
+                <div class="relation-diamond"><div class="relation-shape"><span>SUPPLY</span></div></div>
+                <div class="entity-card"><div class="entity-box"><span class="entity-name">SUPPLIER</span></div></div>
+              </div>
+            </div>
+
+            <div>
+              <div class="diagram-title-sm">Logical Model</div>
+              <div class="logical-model">
+                <div class="table-card">
+                  <div class="table-head">PRODUCT</div>
+                  <div class="table-body">
+                    <div class="table-key"><span>PK</span></div>
+                    <div class="table-fields">
+                      <span>product_ID</span>
+                      <span>product_name</span>
+                      <span>quantity_on_hand</span>
+                    </div>
+                  </div>
+                </div>
+                <div class="logical-connector"></div>
+                <div class="table-card">
+                  <div class="table-head">PRODUCT_COMPONENT</div>
+                  <div class="table-body">
+                    <div class="table-key"><span>PK</span><span>FK</span></div>
+                    <div class="table-fields">
+                      <span>product_ID</span>
+                      <span>component_ID</span>
+                      <span>quantity_used</span>
+                    </div>
+                  </div>
+                </div>
+                <div class="logical-connector"></div>
+                <div class="table-card">
+                  <div class="table-head">COMPONENT</div>
+                  <div class="table-body">
+                    <div class="table-key"><span>PK</span></div>
+                    <div class="table-fields">
+                      <span>component_ID</span>
+                      <span>component_name</span>
+                      <span>description</span>
+                    </div>
+                  </div>
+                </div>
+                <div class="logical-connector"></div>
+                <div class="table-card">
+                  <div class="table-head">SUPPLIER_COMPONENT</div>
+                  <div class="table-body">
+                    <div class="table-key"><span>FK</span><span>FK</span></div>
+                    <div class="table-fields">
+                      <span>supplier_ID</span>
+                      <span>component_ID</span>
+                      <span>unit_price</span>
+                      <span>load_time</span>
+                    </div>
+                  </div>
+                </div>
+                <div class="logical-connector"></div>
+                <div class="table-card">
+                  <div class="table-head">SUPPLIER</div>
+                  <div class="table-body">
+                    <div class="table-key"><span>PK</span></div>
+                    <div class="table-fields">
+                      <span>supplier_ID</span>
+                      <span>supplier_name</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div>
+              <div class="diagram-title-sm">Schema Details</div>
+              <div class="schema-preview">
+                <div class="schema-card">
+                  <div class="schema-title">PRODUCT</div>
+                  <div class="schema-rows">
+                    <div class="schema-row"><span>PK</span><span>product_ID</span></div>
+                    <div class="schema-row"><span>TXT</span><span>product_name</span></div>
+                    <div class="schema-row"><span>INT</span><span>quantity_on_hand</span></div>
+                  </div>
+                </div>
+                <div class="schema-card">
+                  <div class="schema-title">PRODUCT_COMPONENT</div>
+                  <div class="schema-rows">
+                    <div class="schema-row"><span>PK/FK</span><span>product_ID</span></div>
+                    <div class="schema-row"><span>PK/FK</span><span>component_ID</span></div>
+                    <div class="schema-row"><span>INT</span><span>quantity_used</span></div>
+                  </div>
+                </div>
+                <div class="schema-card">
+                  <div class="schema-title">COMPONENT</div>
+                  <div class="schema-rows">
+                    <div class="schema-row"><span>PK</span><span>component_ID</span></div>
+                    <div class="schema-row"><span>TXT</span><span>component_name</span></div>
+                    <div class="schema-row"><span>TXT</span><span>description</span></div>
+                  </div>
+                </div>
+                <div class="schema-card">
+                  <div class="schema-title">SUPPLIER_COMPONENT</div>
+                  <div class="schema-rows">
+                    <div class="schema-row"><span>FK</span><span>supplier_ID</span></div>
+                    <div class="schema-row"><span>FK</span><span>component_ID</span></div>
+                    <div class="schema-row"><span>DEC</span><span>unit_price</span></div>
+                    <div class="schema-row"><span>TXT</span><span>load_time</span></div>
+                  </div>
+                </div>
+                <div class="schema-card">
+                  <div class="schema-title">SUPPLIER</div>
+                  <div class="schema-rows">
+                    <div class="schema-row"><span>PK</span><span>supplier_ID</span></div>
+                    <div class="schema-row"><span>TXT</span><span>supplier_name</span></div>
+                    <div class="schema-row"><span>TXT</span><span>contact_info</span></div>
+                    <div class="schema-row"><span>TXT</span><span>address</span></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
 <!-- ═══════════════════════════════════════════ SLIDE 3: PRODUCTS MODULE -->
 <section class="slide" id="slide-3">
   <div class="grid-overlay"></div>
@@ -859,7 +1425,7 @@
       <span class="speaker-name">Speaker — Angelo</span>
     </div>
 
-    <div class="slide-label reveal reveal-delay-1">02 / Module</div>
+    <div class="slide-label reveal reveal-delay-1">04 / Module</div>
     <h2 class="slide-title reveal reveal-delay-2">Products Module</h2>
     <p class="slide-subtitle reveal reveal-delay-3">How the product page works from the user side and from the PHP side.</p>
 
@@ -928,7 +1494,7 @@
       <span class="speaker-name">Speaker — Jhun</span>
     </div>
 
-    <div class="slide-label reveal reveal-delay-1">03 / Modules</div>
+    <div class="slide-label reveal reveal-delay-1">05 / Modules</div>
     <h2 class="slide-title reveal reveal-delay-2">Components &<br>Suppliers Modules</h2>
     <p class="slide-subtitle reveal reveal-delay-3">Different data, same clean workflow and user experience.</p>
 
@@ -973,7 +1539,7 @@
       <span class="speaker-name">Speaker — Cervales</span>
     </div>
 
-    <div class="slide-label reveal reveal-delay-1">04 / Database & Conclusion</div>
+    <div class="slide-label reveal reveal-delay-1">06 / Database & Conclusion</div>
     <h2 class="slide-title reveal reveal-delay-2">Database Design<br>& Closing Summary</h2>
 
     <div class="stat-row reveal reveal-delay-2">
