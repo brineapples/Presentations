@@ -1,0 +1,642 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Learning Resources Hub</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=DM+Mono:wght@400;500&family=DM+Sans:wght@300;400;500;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --blue-900: #020b18;
+    --blue-800: #061629;
+    --blue-700: #0a2540;
+    --blue-600: #0e3a60;
+    --blue-500: #1258a8;
+    --blue-400: #1e7fcb;
+    --blue-300: #41a3e8;
+    --blue-200: #7dc4f5;
+    --blue-100: #c0e2fc;
+    --blue-50: #e8f5ff;
+    --accent: #00d4ff;
+    --accent2: #0066ff;
+    --white: #f0f8ff;
+    --text-muted: rgba(160, 210, 255, 0.55);
+    --card-bg: rgba(6, 22, 41, 0.72);
+    --card-border: rgba(0, 212, 255, 0.16);
+  }
+
+  *, *::before, *::after {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+  }
+
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background:
+      radial-gradient(circle at top left, rgba(0, 212, 255, 0.08), transparent 22%),
+      radial-gradient(circle at 85% 10%, rgba(0, 102, 255, 0.12), transparent 16%),
+      var(--blue-900);
+    color: var(--white);
+    min-height: 100vh;
+    padding: 2rem;
+    overflow-x: hidden;
+  }
+
+  .grid-overlay {
+    position: fixed;
+    inset: 0;
+    background-image:
+      linear-gradient(rgba(0, 212, 255, 0.06) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(0, 212, 255, 0.06) 1px, transparent 1px);
+    background-size: 60px 60px;
+    pointer-events: none;
+    z-index: 1;
+  }
+
+  .cursor-canvas {
+    position: fixed;
+    inset: 0;
+    z-index: 0;
+    pointer-events: none;
+  }
+
+  .track-lines {
+    position: fixed;
+    inset: 0;
+    z-index: 0;
+    pointer-events: none;
+    background:
+      radial-gradient(circle at 15% 10%, rgba(0, 212, 255, 0.12), transparent 18%),
+      radial-gradient(circle at 80% 20%, rgba(0, 102, 255, 0.1), transparent 16%),
+      radial-gradient(circle at 30% 85%, rgba(65, 163, 232, 0.08), transparent 22%);
+  }
+
+  .glow-orb {
+    position: fixed;
+    border-radius: 50%;
+    filter: blur(80px);
+    pointer-events: none;
+    opacity: 0.35;
+    z-index: 0;
+  }
+
+  .glow-orb.a {
+    width: 600px;
+    height: 600px;
+    background: radial-gradient(circle, #0a3d8f 0%, transparent 70%);
+    top: -10%;
+    left: -15%;
+  }
+
+  .glow-orb.b {
+    width: 400px;
+    height: 400px;
+    background: radial-gradient(circle, #00b4d8 0%, transparent 70%);
+    bottom: 5%;
+    right: -10%;
+  }
+
+  .page-shell {
+    position: relative;
+    z-index: 2;
+    width: min(1180px, 100%);
+    margin: 0 auto;
+  }
+
+  .hero {
+    padding: 3rem 0 2.5rem;
+    display: grid;
+    grid-template-columns: minmax(0, 1.35fr) minmax(280px, 0.9fr);
+    gap: 2rem;
+    align-items: end;
+  }
+
+  .eyebrow {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.74rem;
+    letter-spacing: 0.24em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 1.2rem;
+  }
+
+  .hero-title {
+    font-size: clamp(2.2rem, 5vw, 4.5rem);
+    line-height: 0.96;
+    letter-spacing: -0.03em;
+    font-weight: 700;
+    max-width: 10ch;
+    background: linear-gradient(135deg, #ffffff 30%, var(--blue-200) 60%, var(--accent) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .hero-copy {
+    margin-top: 1.4rem;
+    color: var(--blue-100);
+    max-width: 54ch;
+    line-height: 1.65;
+    font-size: 1rem;
+  }
+
+  .hero-panel {
+    background: rgba(6, 22, 41, 0.58);
+    border: 1px solid var(--card-border);
+    border-radius: 24px;
+    padding: 1.4rem;
+    backdrop-filter: blur(12px);
+    box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.025);
+  }
+
+  .hero-panel-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.66rem;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    margin-bottom: 1rem;
+  }
+
+  .hero-panel-grid {
+    display: grid;
+    gap: 0.8rem;
+  }
+
+  .hero-stat {
+    padding: 0.95rem 1rem;
+    border-radius: 16px;
+    background: rgba(2, 11, 24, 0.55);
+    border: 1px solid rgba(0, 212, 255, 0.12);
+  }
+
+  .hero-stat strong {
+    display: block;
+    font-family: 'Inter', sans-serif;
+    font-size: 1.05rem;
+    margin-bottom: 0.25rem;
+    color: var(--white);
+  }
+
+  .hero-stat span {
+    display: block;
+    font-family: 'DM Mono', monospace;
+    font-size: 0.7rem;
+    color: var(--blue-200);
+    line-height: 1.5;
+  }
+
+  .quick-nav {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.8rem;
+    margin: 1rem 0 2.4rem;
+  }
+
+  .quick-link {
+    text-decoration: none;
+    color: var(--white);
+    padding: 0.7rem 1rem;
+    border-radius: 999px;
+    border: 1px solid rgba(0, 212, 255, 0.18);
+    background: rgba(0, 212, 255, 0.06);
+    font-family: 'DM Mono', monospace;
+    font-size: 0.72rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    transition: transform 0.25s ease, border-color 0.25s ease, background 0.25s ease;
+  }
+
+  .quick-link:hover {
+    transform: translateY(-2px);
+    border-color: rgba(0, 212, 255, 0.35);
+    background: rgba(0, 212, 255, 0.11);
+  }
+
+  .section-block {
+    margin-top: 1.5rem;
+    padding: 1.8rem;
+    border-radius: 28px;
+    border: 1px solid rgba(0, 212, 255, 0.12);
+    background: linear-gradient(180deg, rgba(6, 22, 41, 0.74), rgba(2, 11, 24, 0.82));
+    backdrop-filter: blur(14px);
+  }
+
+  .section-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: end;
+    gap: 1rem;
+    margin-bottom: 1.4rem;
+  }
+
+  .section-kicker {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.68rem;
+    letter-spacing: 0.24em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 0.65rem;
+  }
+
+  .section-title {
+    font-size: clamp(1.4rem, 3vw, 2.1rem);
+    font-weight: 700;
+    letter-spacing: -0.02em;
+  }
+
+  .section-desc {
+    color: var(--blue-200);
+    line-height: 1.6;
+    max-width: 56ch;
+  }
+
+  .section-count {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.72rem;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    white-space: nowrap;
+  }
+
+  .card-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 1rem;
+  }
+
+  .resource-card,
+  .placeholder-card {
+    border-radius: 20px;
+    padding: 1.35rem;
+    border: 1px solid var(--card-border);
+    background: var(--card-bg);
+    min-height: 210px;
+  }
+
+  .resource-card {
+    display: flex;
+    flex-direction: column;
+    text-decoration: none;
+    color: inherit;
+    transition: transform 0.25s ease, border-color 0.25s ease, background 0.25s ease;
+  }
+
+  .resource-card:hover {
+    transform: translateY(-3px);
+    border-color: rgba(0, 212, 255, 0.34);
+    background: rgba(6, 22, 41, 0.9);
+  }
+
+  .card-tag {
+    display: inline-flex;
+    align-self: flex-start;
+    margin-bottom: 1rem;
+    padding: 0.35rem 0.6rem;
+    border-radius: 999px;
+    background: rgba(0, 212, 255, 0.08);
+    border: 1px solid rgba(0, 212, 255, 0.14);
+    font-family: 'DM Mono', monospace;
+    font-size: 0.64rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--accent);
+  }
+
+  .card-title {
+    font-family: 'Inter', sans-serif;
+    font-size: 1.15rem;
+    font-weight: 700;
+    margin-bottom: 0.65rem;
+    color: var(--white);
+  }
+
+  .card-desc {
+    color: var(--blue-200);
+    line-height: 1.55;
+    font-size: 0.94rem;
+  }
+
+  .card-meta {
+    margin-top: auto;
+    padding-top: 1.3rem;
+    font-family: 'DM Mono', monospace;
+    font-size: 0.68rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+  }
+
+  .placeholder-card {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    background:
+      linear-gradient(180deg, rgba(6, 22, 41, 0.66), rgba(2, 11, 24, 0.9)),
+      repeating-linear-gradient(
+        -45deg,
+        rgba(0, 212, 255, 0.03) 0,
+        rgba(0, 212, 255, 0.03) 12px,
+        transparent 12px,
+        transparent 24px
+      );
+    border-style: dashed;
+  }
+
+  .placeholder-title {
+    font-family: 'Inter', sans-serif;
+    font-size: 1rem;
+    font-weight: 600;
+    margin-bottom: 0.6rem;
+  }
+
+  .placeholder-copy {
+    color: var(--blue-200);
+    line-height: 1.55;
+    font-size: 0.92rem;
+  }
+
+  .placeholder-hint {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.68rem;
+    color: var(--text-muted);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  .footer-note {
+    margin: 2rem 0 1rem;
+    text-align: center;
+    color: var(--text-muted);
+    font-family: 'DM Mono', monospace;
+    font-size: 0.72rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    line-height: 1.7;
+  }
+
+  @media (max-width: 900px) {
+    body {
+      padding: 1.2rem;
+    }
+
+    .hero {
+      grid-template-columns: 1fr;
+      padding-top: 1.2rem;
+    }
+
+    .hero-title {
+      max-width: 12ch;
+    }
+
+    .section-head {
+      flex-direction: column;
+      align-items: start;
+    }
+
+    .card-grid {
+      grid-template-columns: 1fr;
+    }
+
+    .resource-card,
+    .placeholder-card {
+      min-height: auto;
+    }
+  }
+
+  @media (max-width: 640px) {
+    body {
+      padding: 0.9rem;
+    }
+
+    .page-shell {
+      width: 100%;
+    }
+
+    .hero {
+      padding: 0.8rem 0 1.6rem;
+      gap: 1.25rem;
+    }
+
+    .hero-title {
+      max-width: 100%;
+      font-size: clamp(2rem, 12vw, 3rem);
+      line-height: 1.02;
+    }
+
+    .hero-copy,
+    .section-desc,
+    .card-desc,
+    .placeholder-copy {
+      font-size: 0.92rem;
+    }
+
+    .hero-panel,
+    .section-block,
+    .resource-card,
+    .placeholder-card {
+      padding: 1.1rem;
+      border-radius: 18px;
+    }
+
+    .quick-nav {
+      gap: 0.55rem;
+      margin: 0.5rem 0 1.6rem;
+    }
+
+    .quick-link {
+      display: flex;
+      width: 100%;
+      justify-content: center;
+      text-align: center;
+      padding: 0.78rem 0.9rem;
+    }
+
+    .section-head {
+      margin-bottom: 1rem;
+    }
+
+    .section-count,
+    .footer-note,
+    .placeholder-hint {
+      letter-spacing: 0.08em;
+    }
+  }
+</style>
+</head>
+<body>
+  <canvas id="cursorCanvas" class="cursor-canvas"></canvas>
+  <div class="track-lines"></div>
+  <div class="grid-overlay"></div>
+  <div class="glow-orb a"></div>
+  <div class="glow-orb b"></div>
+
+  <main class="page-shell">
+    <section class="hero">
+      <div>
+        <div class="eyebrow">GitHub Pages Resource Menu</div>
+        <h1 class="hero-title">Presentations and quizzes in one hub.</h1>
+        <p class="hero-copy">
+          This index now works as a single static menu for all learning materials. Everything uses plain relative links,
+          so it stays compatible with GitHub Pages without any routing, build step, or server-side logic.
+        </p>
+      </div>
+
+      <aside class="hero-panel">
+        <div class="hero-panel-label">Menu Structure</div>
+        <div class="hero-panel-grid">
+          <div class="hero-stat">
+            <strong>Presentations</strong>
+            <span>Slide decks and showcase pages for class or project demos.</span>
+          </div>
+          <div class="hero-stat">
+            <strong>Quizzes</strong>
+            <span>Practice sets or interactive question pages linked the same way.</span>
+          </div>
+          <div class="hero-stat">
+            <strong>Large Quiz Banks</strong>
+            <span>Long-form study pages can live alongside presentations with the same static setup.</span>
+          </div>
+        </div>
+      </aside>
+    </section>
+
+    <nav class="quick-nav" aria-label="Resource categories">
+      <a class="quick-link" href="#presentations">Presentations</a>
+      <a class="quick-link" href="#quizzes">Quizzes</a>
+    </nav>
+
+    <section class="section-block" id="presentations">
+      <div class="section-head">
+        <div>
+          <div class="section-kicker">01 / Library</div>
+          <h2 class="section-title">Presentations</h2>
+          <p class="section-desc">Project decks, reporting slides, and visual walkthroughs.</p>
+        </div>
+        <div class="section-count">1 item live</div>
+      </div>
+
+      <div class="card-grid">
+        <a href="../Presentations/manufacturer_system_presentation.html" class="resource-card">
+          <div class="card-tag">Presentation</div>
+          <div class="card-title">Manufacturer System Presentation</div>
+          <div class="card-desc">
+            PHP web app, Oracle 21c XE database, shared CSS interface, and a 4-person team walkthrough.
+          </div>
+          <div class="card-meta">Relative link ready for GitHub Pages</div>
+        </a>
+      </div>
+    </section>
+
+    <section class="section-block" id="quizzes">
+      <div class="section-head">
+        <div>
+          <div class="section-kicker">02 / Practice</div>
+          <h2 class="section-title">Quizzes</h2>
+          <p class="section-desc">Self-check activities, short assessments, and drill pages.</p>
+        </div>
+        <div class="section-count">1 item live</div>
+      </div>
+
+      <div class="card-grid">
+        <a href="../Quizzes/hci_quiz_100_items.html" class="resource-card">
+          <div class="card-tag">Quiz</div>
+          <div class="card-title">HCI Quiz Bank - 100 Items</div>
+          <div class="card-desc">
+            Full HCI quiz page with 100 items, instant checking, shuffling, topic filters, and live scoring.
+          </div>
+          <div class="card-meta">Static HTML, mobile-ready, GitHub Pages-friendly</div>
+        </a>
+        <article class="placeholder-card">
+          <div>
+            <div class="card-tag">Add More</div>
+            <div class="placeholder-title">Drop future quizzes into this section</div>
+            <div class="placeholder-copy">
+              Keep new quiz files inside <code>Quizzes/</code> and link them with relative paths such as
+              <code>../Quizzes/your_quiz.html</code>.
+            </div>
+          </div>
+          <div class="placeholder-hint">Same mobile-first rule for future quiz pages</div>
+        </article>
+      </div>
+    </section>
+
+    <div class="footer-note">
+      Add new resources by duplicating a card and pointing it to another local HTML file.
+    </div>
+  </main>
+
+  <script>
+    (function() {
+      const canvas = document.getElementById('cursorCanvas');
+      const ctx = canvas.getContext('2d');
+      const points = [];
+      const mouse = { x: window.innerWidth / 2, y: window.innerHeight / 2 };
+      const cols = 7;
+      const rows = 4;
+
+      function resize() {
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+        initPoints();
+      }
+
+      function initPoints() {
+        points.length = 0;
+        for (let row = 0; row < rows; row++) {
+          for (let col = 0; col < cols; col++) {
+            const x = ((col + 0.5) * canvas.width) / cols + (Math.random() - 0.5) * 80;
+            const y = ((row + 0.5) * canvas.height) / rows + (Math.random() - 0.5) * 60;
+            points.push({ x, y, r: 1.5 + Math.random() * 1.6 });
+          }
+        }
+      }
+
+      function draw() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        points.forEach(point => {
+          const dx = mouse.x - point.x;
+          const dy = mouse.y - point.y;
+          const dist = Math.hypot(dx, dy);
+          const strength = Math.max(0, 1 - dist / 420);
+
+          if (strength > 0.02) {
+            ctx.strokeStyle = `rgba(0,212,255,${0.18 * strength})`;
+            ctx.lineWidth = 1;
+            ctx.beginPath();
+            ctx.moveTo(point.x, point.y);
+            ctx.lineTo(mouse.x - dx * 0.1, mouse.y - dy * 0.1);
+            ctx.stroke();
+          }
+
+          ctx.save();
+          ctx.shadowColor = 'rgba(0,212,255,0.9)';
+          ctx.shadowBlur = 14 * strength + 2;
+          ctx.fillStyle = `rgba(0,212,255,${0.35 + strength * 0.35})`;
+          ctx.beginPath();
+          ctx.arc(point.x, point.y, point.r + strength * 1.1, 0, Math.PI * 2);
+          ctx.fill();
+          ctx.restore();
+        });
+
+        requestAnimationFrame(draw);
+      }
+
+      window.addEventListener('mousemove', event => {
+        mouse.x = event.clientX;
+        mouse.y = event.clientY;
+      });
+
+      window.addEventListener('resize', resize);
+      resize();
+      draw();
+    })();
+  </script>
+</body>
+</html>

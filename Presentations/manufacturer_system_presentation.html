@@ -1,0 +1,1911 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Manufacturer System — Presentation</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Mono:wght@300;400;500&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --blue-900: #020b18;
+    --blue-800: #061629;
+    --blue-700: #0a2540;
+    --blue-600: #0e3a60;
+    --blue-500: #1258a8;
+    --blue-400: #1e7fcb;
+    --blue-300: #41a3e8;
+    --blue-200: #7dc4f5;
+    --blue-100: #c0e2fc;
+    --blue-50: #e8f5ff;
+    --accent: #00d4ff;
+    --accent2: #0066ff;
+    --white: #f0f8ff;
+    --text-muted: rgba(160,210,255,0.55);
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html { scroll-behavior: smooth; scroll-snap-type: y mandatory; }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: radial-gradient(circle at top left, rgba(0,212,255,0.08), transparent 22%),
+                radial-gradient(circle at 85% 10%, rgba(0,102,255,0.12), transparent 16%),
+                var(--blue-900);
+    color: var(--white);
+    overflow-x: hidden;
+    -webkit-text-size-adjust: 100%;
+  }
+
+  /* ─── NAV DOTS ─── */
+  .nav-dots {
+    position: fixed; right: 2rem; top: 50%; transform: translateY(-50%);
+    z-index: 100;
+    display: flex; flex-direction: column; gap: 0.65rem;
+  }
+  .nav-dot {
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    border: 1.5px solid rgba(0,212,255,0.4);
+    background: transparent;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    appearance: none;
+    padding: 0;
+  }
+  .nav-dot.active {
+    background: var(--accent);
+    border-color: var(--accent);
+    box-shadow: 0 0 12px var(--accent);
+  }
+
+  /* ─── SLIDE BASE ─── */
+  .slide {
+    min-height: 100vh;
+    scroll-snap-align: start;
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 4rem 5vw;
+  }
+
+  /* ─── SHARED DECORATIONS ─── */
+  .grid-overlay {
+    position: absolute; inset: 0;
+    background-image:
+      linear-gradient(rgba(0,212,255,0.06) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(0,212,255,0.06) 1px, transparent 1px);
+    background-size: 60px 60px;
+    pointer-events: none;
+    z-index: 1;
+  }
+
+  .cursor-canvas {
+    position: fixed;
+    inset: 0;
+    z-index: 0;
+    pointer-events: none;
+  }
+
+  .track-lines {
+    position: fixed;
+    inset: 0;
+    z-index: 0;
+    pointer-events: none;
+    background:
+      radial-gradient(circle at 15% 10%, rgba(0,212,255,0.12), transparent 18%),
+      radial-gradient(circle at 80% 20%, rgba(0,102,255,0.1), transparent 16%),
+      radial-gradient(circle at 30% 85%, rgba(65,163,232,0.08), transparent 22%);
+  }
+
+  .glow-orb {
+    position: absolute;
+    border-radius: 50%;
+    filter: blur(80px);
+    pointer-events: none;
+    opacity: 0.35;
+  }
+
+  /* ─── SLIDE 1: HERO ─── */
+  #slide-1 {
+    background: var(--blue-900);
+    flex-direction: column;
+    justify-content: center;
+    text-align: center;
+  }
+
+  #slide-1 .glow-orb.a {
+    width: 600px; height: 600px;
+    background: radial-gradient(circle, #0a3d8f 0%, transparent 70%);
+    top: -10%; left: -15%;
+  }
+  #slide-1 .glow-orb.b {
+    width: 400px; height: 400px;
+    background: radial-gradient(circle, #00b4d8 0%, transparent 70%);
+    bottom: 5%; right: -10%;
+  }
+
+  .hero-eyebrow {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.72rem;
+    letter-spacing: 0.28em;
+    color: var(--accent);
+    text-transform: uppercase;
+    margin-bottom: 1.8rem;
+    opacity: 0;
+    animation: fadeUp 0.8s 0.2s ease forwards;
+  }
+
+  .hero-title {
+    font-family: 'DM Sans', sans-serif;
+    font-size: clamp(2.5rem, 6vw, 5rem);
+    max-width: min(100%, 18ch);
+    margin: 0 auto;
+    font-weight: 700;
+    line-height: 1;
+    letter-spacing: -0.02em;
+    background: linear-gradient(135deg, #ffffff 30%, var(--blue-200) 60%, var(--accent) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    opacity: 0;
+    animation: fadeUp 0.9s 0.4s ease forwards;
+  }
+
+  .hero-title span {
+    display: block;
+    width: 100%;
+    background: linear-gradient(135deg, var(--blue-300) 0%, var(--accent) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .hero-subtitle {
+    margin-top: 2rem;
+    font-size: 1.05rem;
+    font-weight: 300;
+    color: var(--blue-200);
+    letter-spacing: 0.04em;
+    opacity: 0;
+    animation: fadeUp 0.9s 0.6s ease forwards;
+  }
+
+  .hero-stack {
+    display: flex; gap: 1rem; flex-wrap: wrap; justify-content: center;
+    margin-top: 2.5rem;
+    opacity: 0;
+    animation: fadeUp 0.9s 0.8s ease forwards;
+  }
+
+  .tech-pill {
+    padding: 0.45rem 1.1rem;
+    border: 1px solid rgba(0,212,255,0.3);
+    border-radius: 100px;
+    font-family: 'DM Mono', monospace;
+    font-size: 0.72rem;
+    color: var(--accent);
+    letter-spacing: 0.1em;
+    background: rgba(0,212,255,0.05);
+    backdrop-filter: blur(4px);
+  }
+
+  .hero-presenters {
+    margin-top: 3.5rem;
+    font-size: 0.8rem;
+    font-family: 'DM Mono', monospace;
+    color: var(--text-muted);
+    letter-spacing: 0.15em;
+    opacity: 0;
+    animation: fadeUp 0.9s 1s ease forwards;
+  }
+
+  .hero-presenters strong {
+    color: var(--blue-200);
+  }
+
+  .scroll-hint {
+    position: absolute; bottom: 2.5rem; left: 50%; transform: translateX(-50%);
+    display: flex; flex-direction: column; align-items: center; gap: 0.5rem;
+    opacity: 0;
+    animation: fadeIn 1s 1.4s ease forwards;
+  }
+  .scroll-hint span {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.62rem;
+    letter-spacing: 0.2em;
+    color: var(--text-muted);
+    text-transform: uppercase;
+  }
+  .scroll-arrow {
+    width: 1px; height: 40px;
+    background: linear-gradient(to bottom, var(--accent), transparent);
+    animation: pulse-line 1.5s ease-in-out infinite;
+  }
+
+  /* ─── SLIDE 2: INTRO / OVERVIEW ─── */
+  #slide-2 {
+    background: linear-gradient(160deg, var(--blue-800) 0%, var(--blue-900) 100%);
+  }
+  #slide-2 .glow-orb.a {
+    width: 500px; height: 500px;
+    background: radial-gradient(circle, #0055aa 0%, transparent 65%);
+    top: -20%; right: 0%;
+  }
+
+  .slide-content { position: relative; z-index: 2; width: 100%; max-width: 1100px; }
+  #slide-2b .slide-content { max-width: 1320px; }
+  .mobile-stack { display:flex; flex-direction:column; gap:1.5rem; }
+  .crud-grid { display:grid; grid-template-columns:1fr 1fr; gap:0.7rem; margin-top:0.5rem; }
+  .erd-link-connector {
+    padding-left: 2rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+  .erd-link-connector-line {
+    width: 1px;
+    height: 30px;
+    background: rgba(0,212,255,0.2);
+    margin-left: 58px;
+  }
+
+  .slide-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.65rem;
+    letter-spacing: 0.3em;
+    color: var(--accent);
+    text-transform: uppercase;
+    margin-bottom: 1rem;
+    display: flex; align-items: center; gap: 0.75rem;
+  }
+  .slide-label::before {
+    content: '';
+    width: 28px; height: 1px;
+    background: var(--accent);
+    display: inline-block;
+  }
+
+  .slide-title {
+    font-family: 'DM Sans', sans-serif;
+    font-size: clamp(1.8rem, 4vw, 3rem);
+    font-weight: 700;
+    line-height: 1.05;
+    letter-spacing: -0.02em;
+    margin-bottom: 0.5rem;
+  }
+
+  .slide-subtitle {
+    font-size: 1rem;
+    font-weight: 300;
+    color: var(--text-muted);
+    margin-bottom: 3rem;
+    max-width: 540px;
+  }
+
+  /* Two-col layouts */
+  .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 3rem; align-items: start; }
+  .three-col { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 1.5rem; align-items: start; }
+
+  /* bullet list */
+  .bullet-list { list-style: none; display: flex; flex-direction: column; gap: 1rem; }
+  .bullet-list li {
+    padding-left: 1.5rem;
+    position: relative;
+    font-size: 0.95rem;
+    font-weight: 300;
+    line-height: 1.6;
+    color: var(--blue-100);
+  }
+  .bullet-list li::before {
+    content: '';
+    position: absolute; left: 0; top: 0.6rem;
+    width: 6px; height: 6px;
+    border-radius: 50%;
+    background: var(--accent);
+    box-shadow: 0 0 8px var(--accent);
+  }
+
+  /* ERD diagram */
+  .erd-wrap {
+    background: rgba(10,37,64,0.6);
+    border: 1px solid rgba(0,212,255,0.15);
+    border-radius: 16px;
+    padding: 2rem;
+    backdrop-filter: blur(10px);
+  }
+
+  .erd-title {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.65rem;
+    letter-spacing: 0.2em;
+    color: var(--text-muted);
+    margin-bottom: 1.5rem;
+    text-transform: uppercase;
+  }
+
+  .erd-nodes {
+    display: flex; flex-direction: column; gap: 1rem;
+  }
+
+  .erd-row {
+    display: flex; align-items: center; gap: 0.75rem;
+  }
+
+  .erd-node {
+    background: linear-gradient(135deg, rgba(18,88,168,0.5), rgba(14,58,96,0.5));
+    border: 1px solid rgba(0,212,255,0.3);
+    border-radius: 10px;
+    padding: 0.8rem 1.2rem;
+    min-width: 130px;
+  }
+  .erd-node.bridge {
+    background: rgba(0,212,255,0.07);
+    border-style: dashed;
+    border-color: rgba(0,212,255,0.2);
+    min-width: 160px;
+  }
+  .erd-node-name {
+    font-family: 'DM Sans', sans-serif;
+    font-weight: 700;
+    font-size: 0.78rem;
+    color: var(--accent);
+    letter-spacing: 0.08em;
+    margin-bottom: 0.4rem;
+  }
+  .erd-node-fields {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.62rem;
+    color: var(--text-muted);
+    line-height: 1.6;
+  }
+
+  .erd-arrow {
+    font-size: 0.7rem; color: var(--accent); opacity: 0.6; flex-shrink: 0;
+  }
+
+  .erd-badge {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.58rem;
+    letter-spacing: 0.12em;
+    color: var(--text-muted);
+    background: rgba(0,212,255,0.06);
+    border: 1px solid rgba(0,212,255,0.12);
+    border-radius: 4px;
+    padding: 0.2rem 0.5rem;
+    text-transform: uppercase;
+  }
+
+  .diagram-grid {
+    display: block;
+    width: 100%;
+  }
+  .diagram-box {
+    background: rgba(10,37,64,0.65);
+    border: 1px solid rgba(0,212,255,0.15);
+    border-radius: 20px;
+    padding: 1.6rem;
+    backdrop-filter: blur(12px);
+    min-height: 100%;
+  }
+  .diagram-title-sm {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.68rem;
+    letter-spacing: 0.24em;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.6);
+    margin-bottom: 1rem;
+  }
+  .diagram-sheet {
+    background: linear-gradient(180deg, rgba(255,255,255,0.04), rgba(255,255,255,0.02));
+    border: 1px solid rgba(0,212,255,0.12);
+    border-radius: 22px;
+    padding: 1.35rem;
+    box-shadow: inset 0 0 0 1px rgba(255,255,255,0.025);
+    overflow: hidden;
+  }
+  .diagram-stage {
+    display: flex;
+    flex-direction: column;
+    gap: 2.1rem;
+  }
+  .conceptual-model,
+  .logical-model {
+    display: grid;
+    align-items: center;
+  }
+  .conceptual-model {
+    grid-template-columns: minmax(140px, 1fr) minmax(120px, 0.82fr) minmax(140px, 1fr) minmax(120px, 0.82fr) minmax(140px, 1fr);
+    column-gap: 1.35rem;
+  }
+  .entity-card,
+  .relation-diamond {
+    position: relative;
+    min-height: 116px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .entity-box {
+    width: 100%;
+    min-height: 92px;
+    border-radius: 10px;
+    border: 1.5px solid rgba(148,227,255,0.78);
+    background: rgba(7,26,47,0.72);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 1rem;
+    box-shadow: inset 0 0 0 1px rgba(255,255,255,0.03);
+  }
+  .entity-name,
+  .relation-diamond span,
+  .table-head {
+    font-family: 'DM Sans', sans-serif;
+    font-weight: 700;
+    letter-spacing: 0.02em;
+    color: var(--white);
+  }
+  .entity-name,
+  .relation-diamond span {
+    font-size: 0.78rem;
+    text-transform: uppercase;
+  }
+  .relation-diamond::before,
+  .relation-diamond::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    width: calc(50% - 40px);
+    height: 1.5px;
+    background: rgba(148,227,255,0.62);
+  }
+  .relation-diamond::before { left: 0; }
+  .relation-diamond::after { right: 0; }
+  .relation-shape {
+    width: 74px;
+    height: 74px;
+    transform: rotate(45deg);
+    border-radius: 12px;
+    border: 1.5px solid rgba(148,227,255,0.78);
+    background: rgba(7,26,47,0.72);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: inset 0 0 0 1px rgba(255,255,255,0.03);
+  }
+  .relation-diamond span {
+    transform: rotate(-45deg);
+  }
+  .logical-model {
+    grid-template-columns: minmax(126px, 0.95fr) 28px minmax(156px, 1.1fr) 28px minmax(126px, 0.95fr) 28px minmax(164px, 1.12fr) 28px minmax(126px, 0.95fr);
+    column-gap: 0.55rem;
+    width: 100%;
+  }
+  .logical-connector {
+    position: relative;
+    height: 2px;
+    background: rgba(148,227,255,0.62);
+    min-width: 20px;
+    align-self: center;
+    opacity: 0.9;
+  }
+  .table-card {
+    border-radius: 12px;
+    border: 1.5px solid rgba(148,227,255,0.78);
+    background: rgba(7,26,47,0.72);
+    overflow: hidden;
+    box-shadow: inset 0 0 0 1px rgba(255,255,255,0.03);
+    min-width: 0;
+  }
+  .table-head {
+    min-height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.45rem 0.55rem;
+    border-bottom: 1.5px solid rgba(148,227,255,0.58);
+    font-size: 0.64rem;
+    text-transform: uppercase;
+    text-align: center;
+    line-height: 1.15;
+  }
+  .table-body {
+    display: grid;
+    grid-template-columns: 44px minmax(0, 1fr);
+    min-height: 72px;
+  }
+  .table-key {
+    border-right: 1.5px solid rgba(148,227,255,0.58);
+    padding: 0.5rem 0.25rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.45rem;
+    font-family: 'DM Mono', monospace;
+    font-size: 0.63rem;
+    color: rgba(233,248,255,0.92);
+    text-transform: uppercase;
+    text-align: center;
+  }
+  .table-fields {
+    padding: 0.5rem 0.45rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.38rem;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.56rem;
+    color: rgba(233,248,255,0.94);
+    line-height: 1.12;
+    min-width: 0;
+    overflow: hidden;
+  }
+  .table-fields span {
+    display: block;
+    min-width: 0;
+    overflow-wrap: anywhere;
+    word-break: break-word;
+  }
+  .schema-preview {
+    margin-top: 1.6rem;
+    display: grid;
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+    gap: 1rem;
+  }
+  .schema-card {
+    border-radius: 14px;
+    border: 1px solid rgba(0,212,255,0.16);
+    background: rgba(6,22,41,0.5);
+    padding: 0.85rem 0.9rem 0.95rem;
+    min-width: 0;
+  }
+  .schema-title {
+    font-family: 'DM Sans', sans-serif;
+    font-weight: 700;
+    font-size: 0.7rem;
+    letter-spacing: 0.04em;
+    color: var(--white);
+    text-transform: uppercase;
+    margin-bottom: 0.75rem;
+  }
+  .schema-rows {
+    display: flex;
+    flex-direction: column;
+    gap: 0.38rem;
+  }
+  .schema-row {
+    display: grid;
+    grid-template-columns: 48px minmax(0, 1fr);
+    gap: 0.4rem;
+    font-family: 'DM Mono', monospace;
+    font-size: 0.59rem;
+    line-height: 1.35;
+    color: var(--blue-100);
+  }
+  .schema-row span:last-child {
+    min-width: 0;
+    overflow-wrap: anywhere;
+    word-break: break-word;
+  }
+  .schema-row span:first-child {
+    color: rgba(255,255,255,0.62);
+  }
+
+  #slide-2b {
+    background: linear-gradient(160deg, #051226 0%, #071b32 45%, #020b18 100%);
+  }
+  #slide-2b .glow-orb.a {
+    width: 520px; height: 520px;
+    background: radial-gradient(circle, #0068c6 0%, transparent 68%);
+    top: -15%; left: -5%;
+  }
+  #slide-2b .glow-orb.b {
+    width: 340px; height: 340px;
+    background: radial-gradient(circle, #00d4ff 0%, transparent 70%);
+    bottom: 10%; right: 4%;
+    opacity: 0.16;
+  }
+  #slide-2a {
+    background: radial-gradient(circle at 18% 18%, rgba(0,212,255,0.12), transparent 22%),
+                linear-gradient(160deg, #041021 0%, #071a31 55%, #020b18 100%);
+  }
+  #slide-2a .glow-orb.a {
+    width: 520px; height: 520px;
+    background: radial-gradient(circle, #005eae 0%, transparent 68%);
+    top: -12%; left: -8%;
+  }
+  #slide-2a .glow-orb.b {
+    width: 320px; height: 320px;
+    background: radial-gradient(circle, #00d4ff 0%, transparent 72%);
+    bottom: 8%; right: 6%;
+    opacity: 0.18;
+  }
+  .section-hero {
+    position: relative;
+    z-index: 2;
+    width: min(100%, 1120px);
+    display: grid;
+    grid-template-columns: minmax(0, 1.15fr) minmax(320px, 0.85fr);
+    gap: 3rem;
+    align-items: center;
+  }
+  .section-hero-copy {
+    max-width: 640px;
+  }
+  .section-kicker {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.72rem;
+    letter-spacing: 0.28em;
+    color: var(--accent);
+    text-transform: uppercase;
+    margin-bottom: 1.2rem;
+  }
+  .section-title {
+    font-family: 'DM Sans', sans-serif;
+    font-size: clamp(2.4rem, 5vw, 4.4rem);
+    line-height: 0.98;
+    letter-spacing: -0.03em;
+    font-weight: 700;
+    color: var(--white);
+    margin-bottom: 1.15rem;
+  }
+  .section-title span {
+    display: block;
+    color: var(--accent);
+  }
+  .section-desc {
+    font-size: 1rem;
+    line-height: 1.7;
+    color: var(--blue-100);
+    max-width: 52ch;
+    margin-bottom: 2rem;
+  }
+  .section-meta-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.8rem;
+  }
+  .section-pill {
+    padding: 0.55rem 0.95rem;
+    border-radius: 999px;
+    border: 1px solid rgba(0,212,255,0.24);
+    background: rgba(0,212,255,0.05);
+    font-family: 'DM Mono', monospace;
+    font-size: 0.68rem;
+    letter-spacing: 0.08em;
+    color: var(--blue-100);
+    text-transform: uppercase;
+  }
+  .section-panel {
+    border-radius: 24px;
+    border: 1px solid rgba(0,212,255,0.16);
+    background: rgba(6,22,41,0.58);
+    padding: 1.75rem;
+    backdrop-filter: blur(12px);
+    box-shadow: inset 0 0 0 1px rgba(255,255,255,0.025);
+  }
+  .section-panel-title {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.68rem;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.62);
+    margin-bottom: 1rem;
+  }
+  .section-panel-grid {
+    display: grid;
+    gap: 0.9rem;
+  }
+  .section-panel-item {
+    border-radius: 16px;
+    border: 1px solid rgba(0,212,255,0.14);
+    background: rgba(2,11,24,0.46);
+    padding: 1rem 1.05rem;
+  }
+  .section-panel-item strong {
+    display: block;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.95rem;
+    color: var(--white);
+    margin-bottom: 0.4rem;
+  }
+  .section-panel-item span {
+    display: block;
+    font-family: 'DM Mono', monospace;
+    font-size: 0.72rem;
+    line-height: 1.7;
+    color: var(--blue-100);
+  }
+
+  /* ─── SLIDE 3: PRODUCTS ─── */
+  #slide-3 {
+    background: linear-gradient(150deg, #030f1e 0%, #061c38 60%, #020b18 100%);
+  }
+  #slide-3 .glow-orb.a {
+    width: 450px; height: 450px;
+    background: radial-gradient(circle, #003d7a 0%, transparent 65%);
+    bottom: -10%; left: -5%;
+  }
+  #slide-3 .glow-orb.b {
+    width: 300px; height: 300px;
+    background: radial-gradient(circle, #00b4d8 0%, transparent 70%);
+    top: 10%; right: 5%;
+    opacity: 0.2;
+  }
+
+  /* cards */
+  .card-grid { display: flex; flex-direction: column; gap: 1rem; }
+
+  .card {
+    background: rgba(6,22,41,0.7);
+    border: 1px solid rgba(0,212,255,0.13);
+    border-radius: 14px;
+    padding: 1.5rem 1.8rem;
+    backdrop-filter: blur(8px);
+    transition: border-color 0.3s, transform 0.3s;
+    position: relative;
+    overflow: hidden;
+  }
+  .card::before {
+    content: '';
+    position: absolute; top: 0; left: 0; right: 0;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--accent), transparent);
+    opacity: 0;
+    transition: opacity 0.3s;
+  }
+  .card:hover { border-color: rgba(0,212,255,0.35); transform: translateY(-2px); }
+  .card:hover::before { opacity: 1; }
+
+  .card-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.6rem;
+    letter-spacing: 0.22em;
+    color: var(--accent);
+    text-transform: uppercase;
+    margin-bottom: 0.7rem;
+  }
+
+  .card-text {
+    font-size: 0.88rem;
+    font-weight: 300;
+    color: var(--blue-100);
+    line-height: 1.65;
+  }
+
+  .highlight-box {
+    background: linear-gradient(135deg, rgba(0,212,255,0.08), rgba(0,102,255,0.06));
+    border: 1px solid rgba(0,212,255,0.2);
+    border-radius: 14px;
+    padding: 1.8rem;
+    margin-top: 0;
+    position: relative;
+    overflow: hidden;
+  }
+  .highlight-box::after {
+    content: '';
+    position: absolute; bottom: 0; right: 0;
+    width: 80px; height: 80px;
+    background: radial-gradient(circle, rgba(0,212,255,0.15), transparent 70%);
+    border-radius: 50%;
+  }
+  .highlight-text {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 1.0rem;
+    font-weight: 600;
+    color: var(--blue-100);
+    line-height: 1.5;
+  }
+  .highlight-text em {
+    color: var(--accent);
+    font-style: normal;
+  }
+
+  /* flow diagram */
+  .flow-diagram {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+    margin-top: 1.5rem;
+  }
+  .flow-step {
+    background: rgba(18,88,168,0.25);
+    border: 1px solid rgba(0,212,255,0.2);
+    border-radius: 8px;
+    padding: 0.5rem 0.9rem;
+    font-family: 'DM Mono', monospace;
+    font-size: 0.68rem;
+    color: var(--blue-200);
+    letter-spacing: 0.05em;
+    white-space: nowrap;
+  }
+  .flow-arrow {
+    color: var(--accent); font-size: 0.8rem; opacity: 0.7;
+  }
+
+  /* ─── SLIDE 4: COMPONENTS & SUPPLIERS ─── */
+  #slide-4 {
+    background: linear-gradient(170deg, #020d1c 0%, #071a35 50%, #020b18 100%);
+  }
+  #slide-4 .glow-orb.a {
+    width: 500px; height: 500px;
+    background: radial-gradient(circle, #0a4a8f 0%, transparent 65%);
+    top: -5%; right: -5%;
+  }
+
+  .module-block {
+    background: rgba(6,22,41,0.65);
+    border: 1px solid rgba(0,212,255,0.12);
+    border-radius: 18px;
+    padding: 2rem;
+    backdrop-filter: blur(10px);
+    position: relative;
+    overflow: hidden;
+    height: 100%;
+  }
+  .module-block::before {
+    content: attr(data-letter);
+    position: absolute;
+    right: 1.2rem; top: 0.6rem;
+    font-family: 'Syne', sans-serif;
+    font-size: 5rem;
+    font-weight: 800;
+    color: rgba(0,212,255,0.05);
+    line-height: 1;
+  }
+
+  .module-icon {
+    width: 44px; height: 44px;
+    border-radius: 12px;
+    background: linear-gradient(135deg, rgba(0,212,255,0.15), rgba(0,102,255,0.1));
+    border: 1px solid rgba(0,212,255,0.25);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1.3rem;
+    margin-bottom: 1.2rem;
+  }
+
+  .module-title {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 1.25rem;
+    font-weight: 700;
+    margin-bottom: 0.3rem;
+    color: var(--white);
+  }
+
+  .module-sub {
+    font-size: 0.78rem;
+    color: var(--text-muted);
+    margin-bottom: 1.4rem;
+    font-style: italic;
+  }
+
+  .shared-note {
+    margin-top: 2.5rem;
+    background: linear-gradient(90deg, rgba(0,212,255,0.08), rgba(0,102,255,0.06));
+    border-left: 3px solid var(--accent);
+    border-radius: 0 10px 10px 0;
+    padding: 1.2rem 1.5rem;
+    font-size: 0.88rem;
+    font-weight: 300;
+    color: var(--blue-100);
+    line-height: 1.6;
+  }
+
+  /* ─── SLIDE 5: DB & CONCLUSION ─── */
+  #slide-5 {
+    background: var(--blue-900);
+  }
+  #slide-5 .glow-orb.a {
+    width: 600px; height: 600px;
+    background: radial-gradient(circle, #003366 0%, transparent 65%);
+    top: 50%; left: 50%; transform: translate(-50%,-50%);
+    opacity: 0.25;
+  }
+
+  .stat-row {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.2rem;
+    margin-bottom: 2rem;
+  }
+
+  .stat-card {
+    background: rgba(6,22,41,0.7);
+    border: 1px solid rgba(0,212,255,0.15);
+    border-radius: 14px;
+    padding: 1.5rem;
+    text-align: center;
+    backdrop-filter: blur(8px);
+    transition: transform 0.3s, border-color 0.3s;
+  }
+  .stat-card:hover { transform: translateY(-3px); border-color: rgba(0,212,255,0.3); }
+
+  .stat-num {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 2.4rem;
+    font-weight: 700;
+    background: linear-gradient(135deg, var(--white), var(--accent));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    line-height: 1;
+    margin-bottom: 0.4rem;
+  }
+
+  .stat-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.62rem;
+    letter-spacing: 0.15em;
+    color: var(--text-muted);
+    text-transform: uppercase;
+  }
+
+  .conclusion-box {
+    background: linear-gradient(135deg, rgba(18,88,168,0.2), rgba(0,212,255,0.08));
+    border: 1px solid rgba(0,212,255,0.25);
+    border-radius: 18px;
+    padding: 2.5rem;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+  .conclusion-box::before {
+    content: '';
+    position: absolute; top: 0; left: 10%; right: 10%; height: 1px;
+    background: linear-gradient(90deg, transparent, var(--accent), transparent);
+  }
+
+  .conclusion-quote {
+    font-family: 'DM Sans', sans-serif;
+    font-size: clamp(1.1rem, 2vw, 1.55rem);
+    font-weight: 600;
+    line-height: 1.5;
+    color: var(--white);
+    margin-bottom: 1.5rem;
+  }
+  .conclusion-quote em {
+    color: var(--accent);
+    font-style: normal;
+  }
+
+  .conclusion-meta {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.65rem;
+    letter-spacing: 0.18em;
+    color: var(--text-muted);
+    text-transform: uppercase;
+  }
+
+  .db-feature-list {
+    display: flex; flex-direction: column; gap: 0.85rem;
+  }
+
+  .db-feature {
+    display: flex; align-items: flex-start; gap: 1rem;
+    padding: 0.9rem 1.2rem;
+    background: rgba(10,37,64,0.5);
+    border: 1px solid rgba(0,212,255,0.1);
+    border-radius: 10px;
+    font-size: 0.85rem;
+    font-weight: 300;
+    color: var(--blue-100);
+    line-height: 1.5;
+    transition: border-color 0.3s, background 0.3s;
+  }
+  .db-feature:hover {
+    border-color: rgba(0,212,255,0.25);
+    background: rgba(10,37,64,0.75);
+  }
+  .db-feature-dot {
+    width: 8px; height: 8px; border-radius: 50%;
+    background: var(--accent);
+    box-shadow: 0 0 8px var(--accent);
+    flex-shrink: 0;
+    margin-top: 0.35rem;
+  }
+
+  /* ─── SPEAKER BADGE ─── */
+  .speaker-badge {
+    display: inline-flex; align-items: center; gap: 0.6rem;
+    background: rgba(0,212,255,0.08);
+    border: 1px solid rgba(0,212,255,0.2);
+    border-radius: 100px;
+    padding: 0.35rem 0.9rem 0.35rem 0.6rem;
+    margin-bottom: 1.8rem;
+  }
+  .speaker-dot {
+    width: 6px; height: 6px; border-radius: 50%;
+    background: var(--accent);
+    box-shadow: 0 0 6px var(--accent);
+  }
+  .speaker-name {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.65rem;
+    letter-spacing: 0.15em;
+    color: var(--accent);
+    text-transform: uppercase;
+  }
+
+  /* ─── ANIMATIONS ─── */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(24px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+  @keyframes fadeIn {
+    from { opacity: 0; }
+    to   { opacity: 1; }
+  }
+  @keyframes pulse-line {
+    0%, 100% { opacity: 0.4; transform: scaleY(0.8); }
+    50%       { opacity: 1;   transform: scaleY(1);   }
+  }
+
+  /* Intersection observer reveal */
+  .reveal {
+    opacity: 0;
+    transform: translateY(30px);
+    transition: opacity 0.7s ease, transform 0.7s ease;
+  }
+  .reveal.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  .reveal-delay-1 { transition-delay: 0.1s; }
+  .reveal-delay-2 { transition-delay: 0.2s; }
+  .reveal-delay-3 { transition-delay: 0.35s; }
+  .reveal-delay-4 { transition-delay: 0.5s; }
+  .reveal-delay-5 { transition-delay: 0.65s; }
+
+  /* responsive */
+  @media (max-width: 1024px) {
+    .slide {
+      padding: 3.5rem 4vw;
+    }
+    .nav-dots {
+      right: 1rem;
+    }
+    .hero-title {
+      font-size: clamp(3rem, 10vw, 6rem);
+      max-width: min(100%, 20ch);
+    }
+    .section-hero {
+      grid-template-columns: 1fr;
+    }
+    .diagram-grid {
+      display: block;
+    }
+    .logical-model {
+      grid-template-columns: 1fr;
+      row-gap: 0.8rem;
+    }
+    .logical-connector {
+      height: 22px;
+      width: 2px;
+      margin: 0 auto;
+    }
+    .schema-preview {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+
+  @media (min-width: 1025px) and (max-width: 1280px) {
+    .schema-preview {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+  }
+
+  @media (max-width: 768px) {
+    html {
+      scroll-snap-type: none;
+    }
+    body {
+      overflow-x: hidden;
+    }
+    .nav-dots {
+      top: auto;
+      bottom: 0.9rem;
+      right: auto;
+      left: 50%;
+      transform: translateX(-50%);
+      flex-direction: row;
+      gap: 0.55rem;
+      padding: 0.55rem 0.8rem;
+      border: 1px solid rgba(0,212,255,0.18);
+      border-radius: 999px;
+      background: rgba(2,11,24,0.72);
+      backdrop-filter: blur(12px);
+    }
+    .nav-dot {
+      width: 12px;
+      height: 12px;
+    }
+    .slide {
+      min-height: auto;
+      padding: 4.5rem 1.1rem 4.8rem;
+      align-items: flex-start;
+    }
+    .slide-content,
+    #slide-2b .slide-content,
+    .section-hero {
+      width: 100%;
+      max-width: 100%;
+    }
+    .two-col, .three-col { grid-template-columns: 1fr; gap: 1.4rem; }
+    .stat-row { grid-template-columns: 1fr 1fr; }
+    .speaker-badge {
+      margin-bottom: 1.1rem;
+      padding: 0.4rem 0.8rem 0.4rem 0.6rem;
+    }
+    .slide-label {
+      letter-spacing: 0.22em;
+      margin-bottom: 0.8rem;
+    }
+    .slide-title {
+      font-size: clamp(1.65rem, 8vw, 2.35rem);
+      line-height: 1.08;
+    }
+    .slide-subtitle {
+      margin-bottom: 1.6rem;
+      font-size: 0.94rem;
+    }
+    .hero-subtitle,
+    .section-desc,
+    .card-text,
+    .shared-note,
+    .db-feature {
+      font-size: 0.92rem;
+    }
+    .hero-stack,
+    .section-meta-row {
+      gap: 0.6rem;
+    }
+    .tech-pill,
+    .section-pill {
+      font-size: 0.64rem;
+    }
+    .section-panel,
+    .highlight-box,
+    .module-block,
+    .conclusion-box,
+    .erd-wrap,
+    .diagram-box,
+    .diagram-sheet,
+    .card,
+    .stat-card {
+      padding: 1.15rem;
+    }
+    .flow-diagram {
+      flex-direction: column;
+      align-items: stretch;
+      gap: 0.65rem;
+    }
+    .flow-step {
+      white-space: normal;
+      text-align: center;
+    }
+    .flow-arrow {
+      transform: rotate(90deg);
+      text-align: center;
+    }
+    .erd-row {
+      flex-direction: column;
+      align-items: stretch;
+    }
+    .erd-node,
+    .erd-node.bridge {
+      width: 100%;
+      min-width: 0;
+    }
+    .erd-arrow {
+      align-self: center;
+      transform: rotate(90deg);
+    }
+    .erd-link-connector {
+      display: none;
+    }
+    .section-title {
+      font-size: clamp(2rem, 10vw, 3rem);
+    }
+    .conceptual-model {
+      grid-template-columns: 1fr;
+      row-gap: 0.9rem;
+    }
+    .relation-diamond::before,
+    .relation-diamond::after {
+      display: none;
+    }
+    .relation-shape {
+      width: 68px;
+      height: 68px;
+    }
+    .diagram-title-sm {
+      letter-spacing: 0.16em;
+    }
+    .table-head {
+      font-size: 0.6rem;
+      padding: 0.5rem;
+    }
+    .table-body,
+    .schema-row {
+      grid-template-columns: 42px minmax(0, 1fr);
+    }
+    .table-fields {
+      font-size: 0.58rem;
+    }
+    .schema-preview {
+      grid-template-columns: 1fr;
+    }
+    .crud-grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+    .module-block::before {
+      font-size: 3.8rem;
+    }
+    .highlight-text {
+      font-size: 0.95rem;
+    }
+  }
+
+  @media (max-width: 560px) {
+    .hero-title {
+      font-size: clamp(1.65rem, 9vw, 2.7rem);
+      max-width: 10ch;
+      margin: 0 auto;
+    }
+    .hero-presenters {
+      margin-top: 2.4rem;
+      line-height: 1.9;
+    }
+    .scroll-hint {
+      bottom: 1.2rem;
+    }
+    .slide-label::before {
+      width: 18px;
+    }
+    .section-kicker,
+    .slide-label,
+    .conclusion-meta,
+    .speaker-name {
+      letter-spacing: 0.14em;
+    }
+    .section-panel-grid,
+    .db-feature-list,
+    .card-grid {
+      gap: 0.8rem;
+    }
+    .stat-row,
+    .crud-grid {
+      grid-template-columns: 1fr;
+    }
+    .stat-num {
+      font-size: 2rem;
+    }
+    .diagram-box,
+    .diagram-sheet {
+      padding: 0.95rem;
+    }
+    .entity-box {
+      min-height: 80px;
+      padding: 0.85rem;
+    }
+    .entity-name,
+    .relation-diamond span {
+      font-size: 0.68rem;
+    }
+    .table-key {
+      font-size: 0.56rem;
+    }
+    .table-fields,
+    .schema-row {
+      font-size: 0.55rem;
+    }
+    .module-title {
+      font-size: 1.05rem;
+    }
+    .module-sub {
+      font-size: 0.74rem;
+      margin-bottom: 1rem;
+    }
+    .shared-note {
+      padding: 1rem 1.1rem;
+    }
+  }
+</style>
+</head>
+<body>
+  <canvas id="cursorCanvas" class="cursor-canvas"></canvas>
+  <div class="track-lines"></div>
+
+<!-- NAV DOTS -->
+<nav class="nav-dots" id="navDots">
+  <button class="nav-dot active" type="button" aria-label="Go to slide 1" onclick="goTo(0)"></button>
+  <button class="nav-dot" type="button" aria-label="Go to slide 2" onclick="goTo(1)"></button>
+  <button class="nav-dot" type="button" aria-label="Go to slide 3" onclick="goTo(2)"></button>
+  <button class="nav-dot" type="button" aria-label="Go to slide 4" onclick="goTo(3)"></button>
+  <button class="nav-dot" type="button" aria-label="Go to slide 5" onclick="goTo(4)"></button>
+  <button class="nav-dot" type="button" aria-label="Go to slide 6" onclick="goTo(5)"></button>
+  <button class="nav-dot" type="button" aria-label="Go to slide 7" onclick="goTo(6)"></button>
+</nav>
+
+<!-- ═══════════════════════════════════════════ SLIDE 1: HERO -->
+<section class="slide" id="slide-1">
+  <div class="grid-overlay"></div>
+  <div class="glow-orb a"></div>
+  <div class="glow-orb b"></div>
+
+  <div style="position:relative;z-index:2;text-align:center;">
+    <div class="hero-eyebrow">4-person project presentation</div>
+    <h1 class="hero-title">
+      Manufacturer<span>System</span>
+    </h1>
+    <p class="hero-subtitle">PHP web app · Oracle 21c XE database · Shared CSS interface</p>
+
+    <div class="hero-stack">
+      <span class="tech-pill">PHP</span>
+      <span class="tech-pill">Oracle 21c XE</span>
+      <span class="tech-pill">CRUD</span>
+      <span class="tech-pill">Relational DB</span>
+      <span class="tech-pill">SQL</span>
+    </div>
+
+    <div class="hero-presenters">
+      Presenters &nbsp;·&nbsp;
+      <strong>Reign</strong> &nbsp;·&nbsp;
+      <strong>Angelo</strong> &nbsp;·&nbsp;
+      <strong>Jhun</strong> &nbsp;·&nbsp;
+      <strong>Cervales</strong>
+    </div>
+  </div>
+
+  <div class="scroll-hint">
+    <span>scroll</span>
+    <div class="scroll-arrow"></div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════ SLIDE 2: INTRO & ERD -->
+<section class="slide" id="slide-2">
+  <div class="grid-overlay"></div>
+  <div class="glow-orb a"></div>
+
+  <div class="slide-content">
+    <div class="speaker-badge reveal">
+      <div class="speaker-dot"></div>
+      <span class="speaker-name">Speaker — Reign</span>
+    </div>
+
+    <div class="slide-label reveal reveal-delay-1">01 / Introduction</div>
+    <h2 class="slide-title reveal reveal-delay-2">System Overview<br>& Database Design</h2>
+    <p class="slide-subtitle reveal reveal-delay-3">What the system manages, how requests flow, and the entity-relationship structure.</p>
+
+    <div class="two-col">
+      <!-- Left: intro points -->
+      <div>
+        <ul class="bullet-list">
+          <li class="reveal reveal-delay-1">The system manages three record groups: <strong>products, components, and suppliers</strong>.</li>
+          <li class="reveal reveal-delay-2">Users can create, view, update, and delete records through a simple PHP web interface.</li>
+          <li class="reveal reveal-delay-3">Each page follows the same layout: navigation menu, input form, and records table.</li>
+          <li class="reveal reveal-delay-4">Basic request flow:</li>
+        </ul>
+
+        <div class="flow-diagram reveal reveal-delay-5">
+          <div class="flow-step">Form Input</div>
+          <div class="flow-arrow">→</div>
+          <div class="flow-step">PHP Handler</div>
+          <div class="flow-arrow">→</div>
+          <div class="flow-step">SQL Exec</div>
+          <div class="flow-arrow">→</div>
+          <div class="flow-step">Refreshed Table</div>
+        </div>
+      </div>
+
+      <!-- Right: ERD -->
+      <div class="erd-wrap reveal reveal-delay-2">
+        <div class="erd-title">Entity-Relationship Diagram</div>
+        <div class="erd-nodes">
+
+          <div class="erd-row">
+            <div class="erd-node">
+              <div class="erd-node-name">PRODUCT</div>
+              <div class="erd-node-fields">ID · Name · Qty</div>
+            </div>
+            <div class="erd-arrow">──</div>
+            <div class="erd-node bridge">
+              <div class="erd-node-name">PRODUCT_COMPONENT</div>
+              <div class="erd-node-fields">Bridge table</div>
+            </div>
+            <div class="erd-arrow">──</div>
+            <div class="erd-node">
+              <div class="erd-node-name">COMPONENT</div>
+              <div class="erd-node-fields">ID · Name · Desc</div>
+            </div>
+          </div>
+
+          <div class="erd-link-connector">
+            <div class="erd-link-connector-line"></div>
+          </div>
+
+          <div class="erd-row">
+            <div class="erd-node">
+              <div class="erd-node-name">SUPPLIER</div>
+              <div class="erd-node-fields">ID · Name · Contact · Address</div>
+            </div>
+            <div class="erd-arrow">──</div>
+            <div class="erd-node bridge">
+              <div class="erd-node-name">SUPPLIER_COMPONENT</div>
+              <div class="erd-node-fields">Bridge table</div>
+            </div>
+          </div>
+
+        </div>
+        <div style="margin-top:1.2rem;font-family:'DM Mono',monospace;font-size:0.62rem;color:var(--text-muted);line-height:1.7;">
+          Conceptual: products use components<br>
+          Suppliers provide those components
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════ SLIDE 2A: DATA MODEL TITLE -->
+<section class="slide" id="slide-2a">
+  <div class="grid-overlay"></div>
+  <div class="glow-orb a"></div>
+  <div class="glow-orb b"></div>
+
+  <div class="section-hero">
+    <div class="section-hero-copy">
+      <div class="speaker-badge reveal">
+        <div class="speaker-dot"></div>
+        <span class="speaker-name">Speaker — Reign</span>
+      </div>
+      <div class="section-kicker reveal reveal-delay-1">02 / Data Model</div>
+      <h2 class="section-title reveal reveal-delay-2">Manufacturer System<span>Data Model</span></h2>
+      <p class="section-desc reveal reveal-delay-3">This section introduces the structure behind the project: the high-level conceptual flow, the table relationships, and the schema fields that support the CRUD pages.</p>
+      <div class="section-meta-row reveal reveal-delay-4">
+        <span class="section-pill">Conceptual View</span>
+        <span class="section-pill">Logical Model</span>
+        <span class="section-pill">Schema Details</span>
+      </div>
+    </div>
+
+    <div class="section-panel reveal reveal-delay-3">
+      <div class="section-panel-title">What This Slide Covers</div>
+      <div class="section-panel-grid">
+        <div class="section-panel-item">
+          <strong>Core Entities</strong>
+          <span>PRODUCT, COMPONENT, and SUPPLIER define the main records tracked by the app.</span>
+        </div>
+        <div class="section-panel-item">
+          <strong>Bridge Tables</strong>
+          <span>PRODUCT_COMPONENT and SUPPLIER_COMPONENT map the many-to-many relationships cleanly.</span>
+        </div>
+        <div class="section-panel-item">
+          <strong>Database Intent</strong>
+          <span>The structure is built to keep the UI simple while keeping the data connected and extensible.</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════ SLIDE 2B: DATA MODEL -->
+<section class="slide" id="slide-2b">
+  <div class="grid-overlay"></div>
+  <div class="glow-orb a"></div>
+  <div class="glow-orb b"></div>
+
+  <div class="slide-content">
+    <div class="diagram-grid">
+      <div class="diagram-box reveal reveal-delay-2">
+        <div class="diagram-title-sm">Reference Diagrams</div>
+        <div class="diagram-sheet">
+          <div class="diagram-stage">
+            <div>
+              <div class="diagram-title-sm">Conceptual Model</div>
+              <div class="conceptual-model">
+                <div class="entity-card"><div class="entity-box"><span class="entity-name">PRODUCT</span></div></div>
+                <div class="relation-diamond"><div class="relation-shape"><span>REQUIRES</span></div></div>
+                <div class="entity-card"><div class="entity-box"><span class="entity-name">COMPONENT</span></div></div>
+                <div class="relation-diamond"><div class="relation-shape"><span>SUPPLY</span></div></div>
+                <div class="entity-card"><div class="entity-box"><span class="entity-name">SUPPLIER</span></div></div>
+              </div>
+            </div>
+
+            <div>
+              <div class="diagram-title-sm">Logical Model</div>
+              <div class="logical-model">
+                <div class="table-card">
+                  <div class="table-head">PRODUCT</div>
+                  <div class="table-body">
+                    <div class="table-key"><span>PK</span></div>
+                    <div class="table-fields">
+                      <span>product_ID</span>
+                      <span>product_name</span>
+                      <span>quantity_on_hand</span>
+                    </div>
+                  </div>
+                </div>
+                <div class="logical-connector"></div>
+                <div class="table-card">
+                  <div class="table-head">PRODUCT_COMPONENT</div>
+                  <div class="table-body">
+                    <div class="table-key"><span>PK</span><span>FK</span></div>
+                    <div class="table-fields">
+                      <span>product_ID</span>
+                      <span>component_ID</span>
+                      <span>quantity_used</span>
+                    </div>
+                  </div>
+                </div>
+                <div class="logical-connector"></div>
+                <div class="table-card">
+                  <div class="table-head">COMPONENT</div>
+                  <div class="table-body">
+                    <div class="table-key"><span>PK</span></div>
+                    <div class="table-fields">
+                      <span>component_ID</span>
+                      <span>component_name</span>
+                      <span>description</span>
+                    </div>
+                  </div>
+                </div>
+                <div class="logical-connector"></div>
+                <div class="table-card">
+                  <div class="table-head">SUPPLIER_COMPONENT</div>
+                  <div class="table-body">
+                    <div class="table-key"><span>FK</span><span>FK</span></div>
+                    <div class="table-fields">
+                      <span>supplier_ID</span>
+                      <span>component_ID</span>
+                      <span>unit_price</span>
+                      <span>load_time</span>
+                    </div>
+                  </div>
+                </div>
+                <div class="logical-connector"></div>
+                <div class="table-card">
+                  <div class="table-head">SUPPLIER</div>
+                  <div class="table-body">
+                    <div class="table-key"><span>PK</span></div>
+                    <div class="table-fields">
+                      <span>supplier_ID</span>
+                      <span>supplier_name</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div>
+              <div class="diagram-title-sm">Schema Details</div>
+              <div class="schema-preview">
+                <div class="schema-card">
+                  <div class="schema-title">PRODUCT</div>
+                  <div class="schema-rows">
+                    <div class="schema-row"><span>PK</span><span>product_ID</span></div>
+                    <div class="schema-row"><span>TXT</span><span>product_name</span></div>
+                    <div class="schema-row"><span>INT</span><span>quantity_on_hand</span></div>
+                  </div>
+                </div>
+                <div class="schema-card">
+                  <div class="schema-title">PRODUCT_COMPONENT</div>
+                  <div class="schema-rows">
+                    <div class="schema-row"><span>PK/FK</span><span>product_ID</span></div>
+                    <div class="schema-row"><span>PK/FK</span><span>component_ID</span></div>
+                    <div class="schema-row"><span>INT</span><span>quantity_used</span></div>
+                  </div>
+                </div>
+                <div class="schema-card">
+                  <div class="schema-title">COMPONENT</div>
+                  <div class="schema-rows">
+                    <div class="schema-row"><span>PK</span><span>component_ID</span></div>
+                    <div class="schema-row"><span>TXT</span><span>component_name</span></div>
+                    <div class="schema-row"><span>TXT</span><span>description</span></div>
+                  </div>
+                </div>
+                <div class="schema-card">
+                  <div class="schema-title">SUPPLIER_COMPONENT</div>
+                  <div class="schema-rows">
+                    <div class="schema-row"><span>FK</span><span>supplier_ID</span></div>
+                    <div class="schema-row"><span>FK</span><span>component_ID</span></div>
+                    <div class="schema-row"><span>DEC</span><span>unit_price</span></div>
+                    <div class="schema-row"><span>TXT</span><span>load_time</span></div>
+                  </div>
+                </div>
+                <div class="schema-card">
+                  <div class="schema-title">SUPPLIER</div>
+                  <div class="schema-rows">
+                    <div class="schema-row"><span>PK</span><span>supplier_ID</span></div>
+                    <div class="schema-row"><span>TXT</span><span>supplier_name</span></div>
+                    <div class="schema-row"><span>TXT</span><span>contact_info</span></div>
+                    <div class="schema-row"><span>TXT</span><span>address</span></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════ SLIDE 3: PRODUCTS MODULE -->
+<section class="slide" id="slide-3">
+  <div class="grid-overlay"></div>
+  <div class="glow-orb a"></div>
+  <div class="glow-orb b"></div>
+
+  <div class="slide-content">
+    <div class="speaker-badge reveal">
+      <div class="speaker-dot"></div>
+      <span class="speaker-name">Speaker — Angelo</span>
+    </div>
+
+    <div class="slide-label reveal reveal-delay-1">04 / Module</div>
+    <h2 class="slide-title reveal reveal-delay-2">Products Module</h2>
+    <p class="slide-subtitle reveal reveal-delay-3">How the product page works from the user side and from the PHP side.</p>
+
+    <div class="two-col">
+      <!-- Left column: cards -->
+      <div class="card-grid">
+        <div class="card reveal reveal-delay-1">
+          <div class="card-label">User Side</div>
+          <div class="card-text">The form accepts the product <strong>name</strong> and <strong>quantity on hand</strong>. A table below shows all current records, with action buttons for editing or deleting each row.</div>
+        </div>
+
+        <div class="card reveal reveal-delay-2">
+          <div class="card-label">Program Side</div>
+          <div class="card-text">The PHP file checks which action was requested, then runs the matching SQL statement for <strong>insert</strong>, <strong>update</strong>, or <strong>delete</strong>. The page re-reads the table so the latest data appears immediately.</div>
+        </div>
+
+        <div class="card reveal reveal-delay-3">
+          <div class="card-label">Why It Matters</div>
+          <div class="card-text">Bound parameters keep SQL clean and safely pass input into Oracle. The updated table delivers <strong>instant feedback</strong> after every action.</div>
+        </div>
+      </div>
+
+      <!-- Right column: highlight -->
+      <div class="mobile-stack">
+        <div class="highlight-box reveal reveal-delay-2">
+          <div style="font-family:'DM Mono',monospace;font-size:0.6rem;letter-spacing:0.2em;color:var(--text-muted);text-transform:uppercase;margin-bottom:0.8rem;">Core Pattern</div>
+          <div class="highlight-text">
+            One module page<br>manages <em>one record set</em><br>with a straightforward<br><em>form + table</em> interface.
+          </div>
+        </div>
+
+        <div class="card reveal reveal-delay-4" style="border-color:rgba(0,212,255,0.2);">
+          <div class="card-label">CRUD Workflow</div>
+          <div class="crud-grid">
+            <div style="text-align:center;padding:0.7rem;background:rgba(0,212,255,0.06);border-radius:8px;border:1px solid rgba(0,212,255,0.12);">
+              <div style="font-family:'Syne',sans-serif;font-weight:700;color:var(--accent);font-size:1.1rem;">C</div>
+              <div style="font-family:'DM Mono',monospace;font-size:0.58rem;color:var(--text-muted);margin-top:0.2rem;">CREATE</div>
+            </div>
+            <div style="text-align:center;padding:0.7rem;background:rgba(0,212,255,0.06);border-radius:8px;border:1px solid rgba(0,212,255,0.12);">
+              <div style="font-family:'Syne',sans-serif;font-weight:700;color:var(--accent);font-size:1.1rem;">R</div>
+              <div style="font-family:'DM Mono',monospace;font-size:0.58rem;color:var(--text-muted);margin-top:0.2rem;">READ</div>
+            </div>
+            <div style="text-align:center;padding:0.7rem;background:rgba(0,212,255,0.06);border-radius:8px;border:1px solid rgba(0,212,255,0.12);">
+              <div style="font-family:'Syne',sans-serif;font-weight:700;color:var(--accent);font-size:1.1rem;">U</div>
+              <div style="font-family:'DM Mono',monospace;font-size:0.58rem;color:var(--text-muted);margin-top:0.2rem;">UPDATE</div>
+            </div>
+            <div style="text-align:center;padding:0.7rem;background:rgba(0,212,255,0.06);border-radius:8px;border:1px solid rgba(0,212,255,0.12);">
+              <div style="font-family:'Syne',sans-serif;font-weight:700;color:var(--accent);font-size:1.1rem;">D</div>
+              <div style="font-family:'DM Mono',monospace;font-size:0.58rem;color:var(--text-muted);margin-top:0.2rem;">DELETE</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════ SLIDE 4: COMPONENTS & SUPPLIERS -->
+<section class="slide" id="slide-4">
+  <div class="grid-overlay"></div>
+  <div class="glow-orb a"></div>
+
+  <div class="slide-content">
+    <div class="speaker-badge reveal">
+      <div class="speaker-dot"></div>
+      <span class="speaker-name">Speaker — Jhun</span>
+    </div>
+
+    <div class="slide-label reveal reveal-delay-1">05 / Modules</div>
+    <h2 class="slide-title reveal reveal-delay-2">Components &<br>Suppliers Modules</h2>
+    <p class="slide-subtitle reveal reveal-delay-3">Different data, same clean workflow and user experience.</p>
+
+    <div class="two-col" style="margin-bottom:2rem;">
+      <div class="module-block reveal reveal-delay-2" data-letter="C">
+        <div class="module-icon">⚙️</div>
+        <div class="module-title">Components</div>
+        <div class="module-sub">Parts & materials used in manufacturing</div>
+        <ul class="bullet-list">
+          <li>Stores parts or materials used in manufacturing.</li>
+          <li>Each record includes a component <strong>name</strong> and <strong>description</strong>.</li>
+          <li>Full add, edit, delete, and view support — identical to Products.</li>
+        </ul>
+      </div>
+
+      <div class="module-block reveal reveal-delay-3" data-letter="S">
+        <div class="module-icon">🏭</div>
+        <div class="module-title">Suppliers</div>
+        <div class="module-sub">Where materials & components come from</div>
+        <ul class="bullet-list">
+          <li>Stores supplier <strong>name</strong>, contact information, and address.</li>
+          <li>Helps track origin of all materials and components.</li>
+          <li>Uses the same structure — users need no relearning.</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="shared-note reveal reveal-delay-4">
+      Both modules reuse the same <strong>navigation, form layout, and table style</strong> — improving usability and making the project significantly easier to maintain.
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════ SLIDE 5: DB & CONCLUSION -->
+<section class="slide" id="slide-5">
+  <div class="grid-overlay"></div>
+  <div class="glow-orb a"></div>
+
+  <div class="slide-content">
+    <div class="speaker-badge reveal">
+      <div class="speaker-dot"></div>
+      <span class="speaker-name">Speaker — Cervales</span>
+    </div>
+
+    <div class="slide-label reveal reveal-delay-1">06 / Database & Conclusion</div>
+    <h2 class="slide-title reveal reveal-delay-2">Database Design<br>& Closing Summary</h2>
+
+    <div class="stat-row reveal reveal-delay-2">
+      <div class="stat-card">
+        <div class="stat-num">3</div>
+        <div class="stat-label">Core Tables</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-num">2</div>
+        <div class="stat-label">Bridge Tables</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-num">21c</div>
+        <div class="stat-label">Oracle XE</div>
+      </div>
+    </div>
+
+    <div class="two-col">
+      <div class="db-feature-list">
+        <div class="db-feature reveal reveal-delay-2">
+          <div class="db-feature-dot"></div>
+          Oracle 21c XE stores the main PRODUCT, COMPONENT, and SUPPLIER tables with <strong>identity-based primary keys</strong>.
+        </div>
+        <div class="db-feature reveal reveal-delay-3">
+          <div class="db-feature-dot"></div>
+          PRODUCT_COMPONENT and SUPPLIER_COMPONENT model relationships instead of keeping records isolated.
+        </div>
+        <div class="db-feature reveal reveal-delay-4">
+          <div class="db-feature-dot"></div>
+          Design is <strong>ready for future features</strong>: part tracing, material computation, supplier link views.
+        </div>
+        <div class="db-feature reveal reveal-delay-5">
+          <div class="db-feature-dot"></div>
+          Sample data in the SQL file makes the system easier to <strong>test and demonstrate</strong>.
+        </div>
+      </div>
+
+      <div class="conclusion-box reveal reveal-delay-3">
+        <div class="conclusion-quote">
+          A simple but functional <em>CRUD system</em> that combines web pages, <em>PHP logic</em>, and a relational <em>Oracle database</em>.
+        </div>
+        <div class="conclusion-meta">End of presentation</div>
+
+        <div style="margin-top:2rem;display:flex;justify-content:center;gap:0.7rem;flex-wrap:wrap;">
+          <span class="tech-pill">Reign</span>
+          <span class="tech-pill">Angelo</span>
+          <span class="tech-pill">Jhun</span>
+          <span class="tech-pill">Cervales</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<script>
+  // ─── INTERSECTION OBSERVER for reveals ───
+  const reveals = document.querySelectorAll('.reveal');
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) e.target.classList.add('visible');
+    });
+  }, { threshold: 0.15 });
+  reveals.forEach(el => observer.observe(el));
+
+  // ─── NAV DOTS active state ───
+  const slides = document.querySelectorAll('.slide');
+  const dots   = document.querySelectorAll('.nav-dot');
+
+  const slideObserver = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        const idx = Array.from(slides).indexOf(e.target);
+        dots.forEach(d => d.classList.remove('active'));
+        if (dots[idx]) dots[idx].classList.add('active');
+      }
+    });
+  }, { threshold: 0.5 });
+
+  slides.forEach(s => slideObserver.observe(s));
+
+  function goTo(idx) {
+    slides[idx].scrollIntoView({ behavior: 'smooth' });
+  }
+</script>
+<script>
+  (function() {
+    const canvas = document.getElementById('cursorCanvas');
+    const ctx = canvas.getContext('2d');
+    const points = [];
+    const mouse = { x: window.innerWidth / 2, y: window.innerHeight / 2 };
+    const cols = 7;
+    const rows = 4;
+
+    function resize() {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+      initPoints();
+    }
+
+    function initPoints() {
+      points.length = 0;
+      for (let row = 0; row < rows; row++) {
+        for (let col = 0; col < cols; col++) {
+          const x = (col + 0.5) * canvas.width / cols + (Math.random() - 0.5) * 80;
+          const y = (row + 0.5) * canvas.height / rows + (Math.random() - 0.5) * 60;
+          points.push({ x, y, r: 1.5 + Math.random() * 1.6 });
+        }
+      }
+    }
+
+    function draw() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      points.forEach(point => {
+        const dx = mouse.x - point.x;
+        const dy = mouse.y - point.y;
+        const dist = Math.hypot(dx, dy);
+        const strength = Math.max(0, 1 - dist / 420);
+
+        if (strength > 0.02) {
+          ctx.strokeStyle = `rgba(0,212,255,${0.18 * strength})`;
+          ctx.lineWidth = 1;
+          ctx.beginPath();
+          ctx.moveTo(point.x, point.y);
+          ctx.lineTo(mouse.x - dx * 0.1, mouse.y - dy * 0.1);
+          ctx.stroke();
+        }
+
+        ctx.save();
+        ctx.shadowColor = 'rgba(0,212,255,0.9)';
+        ctx.shadowBlur = 14 * strength + 2;
+        ctx.fillStyle = `rgba(0,212,255,${0.35 + strength * 0.35})`;
+        ctx.beginPath();
+        ctx.arc(point.x, point.y, point.r + strength * 1.1, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.restore();
+      });
+      requestAnimationFrame(draw);
+    }
+
+    window.addEventListener('mousemove', event => {
+      mouse.x = event.clientX;
+      mouse.y = event.clientY;
+    });
+    window.addEventListener('resize', resize);
+    resize();
+    draw();
+  })();
+</script>

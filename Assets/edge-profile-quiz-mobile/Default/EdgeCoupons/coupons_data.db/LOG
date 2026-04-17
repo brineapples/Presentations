@@ -1,0 +1,5 @@
+2026/04/17-12:20:13.935 970 Creating DB C:\Users\nulln\source\repos\Presentations\Assets\edge-profile-quiz-mobile\Default\EdgeCoupons/coupons_data.db since it was missing.
+2026/04/17-12:20:13.941 970 Reusing MANIFEST C:\Users\nulln\source\repos\Presentations\Assets\edge-profile-quiz-mobile\Default\EdgeCoupons/coupons_data.db/MANIFEST-000001
+2026/04/17-12:20:13.959 640 Level-0 table #5: started
+2026/04/17-12:20:13.968 640 Level-0 table #5: 682105 bytes OK
+2026/04/17-12:20:13.970 640 Delete type=0 #3
