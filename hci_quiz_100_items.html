@@ -1,0 +1,1009 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>HCI Quiz Bank - 100 Items</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&family=DM+Mono:wght@400;500&family=DM+Sans:wght@300;400;500;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --blue-950: #010713;
+    --blue-900: #020b18;
+    --blue-800: #061629;
+    --blue-700: #0a2540;
+    --blue-600: #0e3a60;
+    --blue-500: #1258a8;
+    --blue-400: #1e7fcb;
+    --blue-300: #41a3e8;
+    --blue-200: #7dc4f5;
+    --blue-100: #c0e2fc;
+    --blue-50: #e8f5ff;
+    --accent: #00d4ff;
+    --accent2: #0066ff;
+    --green: #47d48f;
+    --yellow: #ffd166;
+    --red: #ff6b81;
+    --white: #f0f8ff;
+    --text-muted: rgba(160, 210, 255, 0.58);
+    --card-bg: rgba(6, 22, 41, 0.74);
+    --card-border: rgba(0, 212, 255, 0.14);
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background:
+      radial-gradient(circle at top left, rgba(0, 212, 255, 0.08), transparent 22%),
+      radial-gradient(circle at 85% 10%, rgba(0, 102, 255, 0.12), transparent 16%),
+      var(--blue-900);
+    color: var(--white);
+    min-height: 100vh;
+    padding: 1.6rem;
+    overflow-x: hidden;
+    -webkit-text-size-adjust: 100%;
+  }
+
+  .grid-overlay {
+    position: fixed;
+    inset: 0;
+    background-image:
+      linear-gradient(rgba(0, 212, 255, 0.06) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(0, 212, 255, 0.06) 1px, transparent 1px);
+    background-size: 60px 60px;
+    pointer-events: none;
+    z-index: 1;
+  }
+
+  .track-lines {
+    position: fixed;
+    inset: 0;
+    z-index: 0;
+    pointer-events: none;
+    background:
+      radial-gradient(circle at 15% 10%, rgba(0, 212, 255, 0.12), transparent 18%),
+      radial-gradient(circle at 80% 20%, rgba(0, 102, 255, 0.1), transparent 16%),
+      radial-gradient(circle at 30% 85%, rgba(65, 163, 232, 0.08), transparent 22%);
+  }
+
+  .cursor-canvas {
+    position: fixed;
+    inset: 0;
+    z-index: 0;
+    pointer-events: none;
+  }
+
+  .glow-orb {
+    position: fixed;
+    border-radius: 50%;
+    filter: blur(80px);
+    pointer-events: none;
+    opacity: 0.35;
+    z-index: 0;
+  }
+
+  .glow-orb.a {
+    width: 560px;
+    height: 560px;
+    background: radial-gradient(circle, #0a3d8f 0%, transparent 70%);
+    top: -12%;
+    left: -14%;
+  }
+
+  .glow-orb.b {
+    width: 420px;
+    height: 420px;
+    background: radial-gradient(circle, #00b4d8 0%, transparent 70%);
+    bottom: 4%;
+    right: -10%;
+  }
+
+  .page-shell {
+    position: relative;
+    z-index: 2;
+    width: min(1280px, 100%);
+    margin: 0 auto;
+  }
+
+  .back-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.55rem;
+    text-decoration: none;
+    color: var(--blue-100);
+    font-family: 'DM Mono', monospace;
+    font-size: 0.7rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    margin-bottom: 1.4rem;
+  }
+
+  .hero {
+    padding: 1rem 0 2rem;
+    display: grid;
+    grid-template-columns: minmax(0, 1.2fr) minmax(320px, 0.8fr);
+    gap: 1.5rem;
+    align-items: stretch;
+  }
+
+  .hero-panel,
+  .summary-panel,
+  .filters-panel,
+  .score-panel,
+  .question-card,
+  .source-panel {
+    background: rgba(6, 22, 41, 0.66);
+    border: 1px solid var(--card-border);
+    border-radius: 24px;
+    backdrop-filter: blur(12px);
+    box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.025);
+  }
+
+  .hero-panel {
+    padding: 1.7rem;
+  }
+
+  .eyebrow,
+  .panel-label,
+  .question-meta,
+  .source-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.68rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--accent);
+  }
+
+  .eyebrow { margin-bottom: 1rem; }
+
+  .hero-title {
+    font-family: 'Inter', sans-serif;
+    font-size: clamp(2.4rem, 5vw, 4.6rem);
+    line-height: 0.95;
+    letter-spacing: -0.03em;
+    font-weight: 800;
+    max-width: 11ch;
+    background: linear-gradient(135deg, #ffffff 30%, var(--blue-200) 60%, var(--accent) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .hero-copy {
+    margin-top: 1.2rem;
+    max-width: 56ch;
+    line-height: 1.7;
+    color: var(--blue-100);
+    font-size: 1rem;
+  }
+
+  .hero-pills {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    margin-top: 1.6rem;
+  }
+
+  .pill {
+    padding: 0.5rem 0.8rem;
+    border-radius: 999px;
+    border: 1px solid rgba(0, 212, 255, 0.2);
+    background: rgba(0, 212, 255, 0.06);
+    font-family: 'DM Mono', monospace;
+    font-size: 0.68rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--blue-100);
+  }
+
+  .summary-panel {
+    padding: 1.5rem;
+    display: grid;
+    gap: 0.8rem;
+  }
+
+  .panel-label {
+    color: var(--text-muted);
+    letter-spacing: 0.18em;
+  }
+
+  .summary-grid {
+    display: grid;
+    gap: 0.8rem;
+  }
+
+  .summary-card {
+    border-radius: 18px;
+    background: rgba(2, 11, 24, 0.58);
+    border: 1px solid rgba(0, 212, 255, 0.12);
+    padding: 1rem;
+  }
+
+  .summary-card strong {
+    display: block;
+    font-family: 'Inter', sans-serif;
+    font-size: 1.05rem;
+    margin-bottom: 0.25rem;
+  }
+
+  .summary-card span {
+    color: var(--blue-200);
+    line-height: 1.55;
+    font-size: 0.88rem;
+  }
+
+  .toolbar {
+    display: grid;
+    grid-template-columns: minmax(0, 1.2fr) minmax(280px, 0.8fr);
+    gap: 1rem;
+    margin-bottom: 1.2rem;
+    align-items: start;
+  }
+
+  .filters-panel,
+  .score-panel,
+  .source-panel {
+    padding: 1.25rem;
+  }
+
+  .filters-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 0.85rem;
+    margin-top: 1rem;
+  }
+
+  .field label {
+    display: block;
+    margin-bottom: 0.4rem;
+    color: var(--blue-100);
+    font-size: 0.88rem;
+  }
+
+  .field select,
+  .field button {
+    width: 100%;
+    border-radius: 14px;
+    border: 1px solid rgba(0, 212, 255, 0.18);
+    background: rgba(2, 11, 24, 0.72);
+    color: var(--white);
+    padding: 0.82rem 0.95rem;
+    font: inherit;
+  }
+
+  .field button {
+    cursor: pointer;
+    background: linear-gradient(135deg, rgba(0, 212, 255, 0.12), rgba(0, 102, 255, 0.12));
+    transition: transform 0.25s ease, border-color 0.25s ease;
+  }
+
+  .field button:hover {
+    transform: translateY(-2px);
+    border-color: rgba(0, 212, 255, 0.34);
+  }
+
+  .score-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 0.8rem;
+    margin-top: 1rem;
+  }
+
+  .score-stat {
+    padding: 0.95rem;
+    border-radius: 16px;
+    background: rgba(2, 11, 24, 0.62);
+    border: 1px solid rgba(0, 212, 255, 0.12);
+  }
+
+  .score-stat strong {
+    display: block;
+    font-family: 'Inter', sans-serif;
+    font-size: 1.15rem;
+    margin-bottom: 0.25rem;
+  }
+
+  .score-stat span {
+    color: var(--text-muted);
+    font-size: 0.82rem;
+  }
+
+  .progress-wrap {
+    margin-top: 1rem;
+  }
+
+  .progress-bar {
+    width: 100%;
+    height: 10px;
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.08);
+    overflow: hidden;
+  }
+
+  .progress-fill {
+    height: 100%;
+    width: 0;
+    background: linear-gradient(90deg, var(--accent), var(--blue-300));
+    border-radius: inherit;
+    transition: width 0.25s ease;
+  }
+
+  .progress-copy {
+    margin-top: 0.65rem;
+    color: var(--blue-200);
+    font-size: 0.9rem;
+  }
+
+  .questions-grid {
+    display: grid;
+    gap: 1rem;
+  }
+
+  .question-card {
+    padding: 1.35rem;
+  }
+
+  .question-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: start;
+    gap: 1rem;
+    margin-bottom: 0.9rem;
+  }
+
+  .question-id {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.72rem;
+    color: var(--accent);
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+  }
+
+  .topic-chip {
+    padding: 0.38rem 0.68rem;
+    border-radius: 999px;
+    background: rgba(0, 212, 255, 0.08);
+    border: 1px solid rgba(0, 212, 255, 0.14);
+    font-family: 'DM Mono', monospace;
+    font-size: 0.64rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--blue-100);
+    white-space: nowrap;
+  }
+
+  .question-text {
+    font-size: 1.03rem;
+    line-height: 1.6;
+    color: var(--white);
+    margin-bottom: 1rem;
+  }
+
+  .choices {
+    display: grid;
+    gap: 0.7rem;
+  }
+
+  .choice {
+    width: 100%;
+    text-align: left;
+    padding: 0.95rem 1rem;
+    border-radius: 16px;
+    border: 1px solid rgba(0, 212, 255, 0.14);
+    background: rgba(2, 11, 24, 0.68);
+    color: var(--blue-100);
+    cursor: pointer;
+    transition: transform 0.2s ease, border-color 0.2s ease, background 0.2s ease;
+    font: inherit;
+    line-height: 1.5;
+  }
+
+  .choice:hover {
+    transform: translateY(-1px);
+    border-color: rgba(0, 212, 255, 0.3);
+  }
+
+  .choice.selected {
+    border-color: rgba(0, 212, 255, 0.42);
+    background: rgba(0, 212, 255, 0.12);
+    color: var(--white);
+  }
+
+  .choice.correct {
+    border-color: rgba(71, 212, 143, 0.55);
+    background: rgba(71, 212, 143, 0.14);
+    color: #d9ffee;
+  }
+
+  .choice.incorrect {
+    border-color: rgba(255, 107, 129, 0.5);
+    background: rgba(255, 107, 129, 0.12);
+    color: #ffe4e9;
+  }
+
+  .question-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.7rem;
+    margin-top: 1rem;
+  }
+
+  .question-actions button,
+  .footer-actions button {
+    border-radius: 14px;
+    border: 1px solid rgba(0, 212, 255, 0.18);
+    background: rgba(0, 212, 255, 0.06);
+    color: var(--white);
+    padding: 0.78rem 1rem;
+    cursor: pointer;
+    font: inherit;
+  }
+
+  .footer-actions button {
+    min-width: 180px;
+  }
+
+  .question-status {
+    margin-top: 0.95rem;
+    border-radius: 16px;
+    padding: 0.9rem 1rem;
+    background: rgba(2, 11, 24, 0.72);
+    border: 1px solid rgba(0, 212, 255, 0.12);
+    display: none;
+  }
+
+  .question-status.visible { display: block; }
+  .question-status.correct { border-color: rgba(71, 212, 143, 0.35); }
+  .question-status.incorrect { border-color: rgba(255, 107, 129, 0.35); }
+
+  .status-head {
+    font-family: 'Inter', sans-serif;
+    font-size: 0.98rem;
+    font-weight: 700;
+    margin-bottom: 0.35rem;
+  }
+
+  .status-copy {
+    color: var(--blue-100);
+    line-height: 1.55;
+    font-size: 0.92rem;
+  }
+
+  .empty-state {
+    text-align: center;
+    padding: 2rem 1rem;
+    color: var(--blue-200);
+  }
+
+  .source-panel {
+    margin-top: 1.2rem;
+  }
+
+  .source-list {
+    margin-top: 0.9rem;
+    display: grid;
+    gap: 0.7rem;
+  }
+
+  .source-item {
+    padding: 0.9rem 1rem;
+    border-radius: 16px;
+    background: rgba(2, 11, 24, 0.58);
+    border: 1px solid rgba(0, 212, 255, 0.12);
+    color: var(--blue-100);
+  }
+
+  .footer-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.8rem;
+    margin-top: 1rem;
+  }
+
+  @media (max-width: 980px) {
+    .hero,
+    .toolbar {
+      grid-template-columns: 1fr;
+    }
+
+    .filters-grid {
+      grid-template-columns: 1fr 1fr;
+    }
+  }
+
+  @media (max-width: 640px) {
+    body {
+      padding: 0.9rem;
+    }
+
+    .hero-panel,
+    .summary-panel,
+    .filters-panel,
+    .score-panel,
+    .question-card,
+    .source-panel {
+      border-radius: 18px;
+      padding: 1rem;
+    }
+
+    .hero-title {
+      font-size: clamp(2rem, 11vw, 3.2rem);
+      max-width: 9ch;
+    }
+
+    .hero-copy,
+    .question-text,
+    .status-copy,
+    .progress-copy {
+      font-size: 0.94rem;
+    }
+
+    .filters-grid,
+    .score-grid {
+      grid-template-columns: 1fr;
+    }
+
+    .question-top {
+      flex-direction: column;
+      gap: 0.65rem;
+    }
+
+    .topic-chip {
+      white-space: normal;
+    }
+
+    .choice,
+    .field select,
+    .field button,
+    .question-actions button,
+    .footer-actions button {
+      min-height: 48px;
+    }
+  }
+</style>
+</head>
+<body>
+  <canvas id="cursorCanvas" class="cursor-canvas"></canvas>
+  <div class="track-lines"></div>
+  <div class="grid-overlay"></div>
+  <div class="glow-orb a"></div>
+  <div class="glow-orb b"></div>
+
+  <main class="page-shell">
+    <a class="back-link" href="index.html">← Back to Resource Hub</a>
+
+    <section class="hero">
+      <div class="hero-panel">
+        <div class="eyebrow">HCI Quiz System</div>
+        <h1 class="hero-title">100-item HCI mastery bank.</h1>
+        <p class="hero-copy">
+          Built from your quiz schema and turned into a full study page with scoring, instant feedback,
+          filters, shuffling, and a mobile-ready layout. Same visual family as the hub and presentation pages,
+          but tuned for long-form practice instead of slide viewing.
+        </p>
+        <div class="hero-pills">
+          <span class="pill">100 Items</span>
+          <span class="pill">50 Situational</span>
+          <span class="pill">50 Memorization</span>
+          <span class="pill">4 Source Decks</span>
+        </div>
+      </div>
+
+      <aside class="summary-panel">
+        <div class="panel-label">Quiz Controls</div>
+        <div class="summary-grid">
+          <div class="summary-card">
+            <strong>Instant Checking</strong>
+            <span>Answer item by item and see the correct choice immediately.</span>
+          </div>
+          <div class="summary-card">
+            <strong>Filter by Focus</strong>
+            <span>Study all items, only situational items, only memorization items, or specific topics.</span>
+          </div>
+          <div class="summary-card">
+            <strong>Shuffle Ready</strong>
+            <span>Reorder the full bank anytime for a fresh pass without losing the original answer key.</span>
+          </div>
+        </div>
+      </aside>
+    </section>
+
+    <section class="toolbar">
+      <div class="filters-panel">
+        <div class="panel-label">Study Filters</div>
+        <div class="filters-grid">
+          <div class="field">
+            <label for="typeFilter">Question Type</label>
+            <select id="typeFilter">
+              <option value="all">All types</option>
+            </select>
+          </div>
+          <div class="field">
+            <label for="topicFilter">Topic</label>
+            <select id="topicFilter">
+              <option value="all">All topics</option>
+            </select>
+          </div>
+          <div class="field">
+            <label for="sortMode">Order</label>
+            <select id="sortMode">
+              <option value="default">Default order</option>
+              <option value="shuffle">Shuffle questions</option>
+            </select>
+          </div>
+          <div class="field">
+            <label>&nbsp;</label>
+            <button id="applyFilters" type="button">Apply Filters</button>
+          </div>
+          <div class="field">
+            <label>&nbsp;</label>
+            <button id="resetProgress" type="button">Reset Progress</button>
+          </div>
+          <div class="field">
+            <label>&nbsp;</label>
+            <button id="revealAll" type="button">Reveal All Answers</button>
+          </div>
+        </div>
+      </div>
+
+      <aside class="score-panel">
+        <div class="panel-label">Live Scoreboard</div>
+        <div class="score-grid">
+          <div class="score-stat">
+            <strong id="answeredCount">0</strong>
+            <span>Answered</span>
+          </div>
+          <div class="score-stat">
+            <strong id="correctCount">0</strong>
+            <span>Correct</span>
+          </div>
+          <div class="score-stat">
+            <strong id="accuracyValue">0%</strong>
+            <span>Accuracy</span>
+          </div>
+          <div class="score-stat">
+            <strong id="remainingCount">100</strong>
+            <span>Remaining</span>
+          </div>
+        </div>
+        <div class="progress-wrap">
+          <div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div>
+          <div class="progress-copy" id="progressCopy">0 of 100 questions answered.</div>
+        </div>
+      </aside>
+    </section>
+
+    <section class="questions-grid" id="questionsGrid"></section>
+
+    <section class="source-panel">
+      <div class="source-label">Source Presentations</div>
+      <div class="source-list" id="sourceList"></div>
+      <div class="footer-actions">
+        <button id="scrollTopButton" type="button">Back to Top</button>
+        <button id="shuffleAgainButton" type="button">Shuffle and Rebuild</button>
+      </div>
+    </section>
+  </main>
+
+  <script id="quizData" type="application/json">{"quiz_title":"HCI Quiz Bank - 100 Items","schema_type":"json-in-text-file","source_presentations":["1 Introduction to HCI (1).pptx","2 Psychology of Everyday Things(1).pptx","3 Interactive Design(1).pptx","4-User-Centered-Design(1).pptx"],"total_items":100,"distribution":{"situational":50,"memorization":50},"answer_distribution":{"0":25,"1":25,"2":25,"3":25},"notes_for_codex":{"answer_indexing":"0-based","render_suggestion":"shuffle choices and questions at runtime","sections":["situational","memorization"]},"items":[{"id":"Q001","type":"situational","question":"A hospitalâ€™s medication-entry system is redesigned so nurses finish charting faster and make fewer mistakes. Which HCI importance is being improved most directly?","choices":["Enhanced efficiency","Innovation","Pleasant color scheme","Philosophical reflection"],"answer":0,"topic":"HCI Importance"},{"id":"Q002","type":"situational","question":"A mobile app is easy for new users on day one, but a month later many users cannot remember how to perform common tasks. Which usability quality is weakest?","choices":["Easy to learn","Easy to remember how to use","Safe to use","Enjoyable to use"],"answer":1,"topic":"Usability"},{"id":"Q003","type":"situational","question":"A company requires every purchase request to follow a strict approval workflow and limits who can access certain screens. Which HCI factor is shaping the design most?","choices":["Comfort factors","Environmental factors","Organizational factors","Behavioral level"],"answer":2,"topic":"HCI Factors"},{"id":"Q004","type":"situational","question":"A kiosk works well indoors, but users outdoors cannot read the screen clearly under strong sunlight. Which factor was overlooked?","choices":["Task factors","Productivity factors","System functionality","Environmental factors"],"answer":3,"topic":"HCI Factors"},{"id":"Q005","type":"situational","question":"A system was designed for expert staff, but it is later given to elderly first-time users without simplifying the interface. Which factor is being ignored?","choices":["The user","Constraints","Behavior","Time"],"answer":0,"topic":"HCI Factors"},{"id":"Q006","type":"situational","question":"Office employees develop wrist and neck pain after months of using poorly positioned screens and keyboards. Which factor needs more attention?","choices":["Organizational factors","Comfort factors","Task factors","Language"],"answer":1,"topic":"HCI Factors"},{"id":"Q007","type":"situational","question":"Users say a booking app has enough features, but the menus, icons, and buttons are confusing. Which factor needs the biggest redesign?","choices":["System functionality","Environmental factors","User interface","Productivity factors"],"answer":2,"topic":"HCI Factors"},{"id":"Q008","type":"situational","question":"Workers repeat the same data-entry form hundreds of times each day under deadline pressure. Which factor should heavily influence the interface design?","choices":["Philosophy","Linguistics","Reflective level","Task factors"],"answer":3,"topic":"HCI Factors"},{"id":"Q009","type":"situational","question":"A startup removes useful features because of a tiny budget, limited time, and legal requirements. Which HCI factor is restricting the design?","choices":["Constraints","Affordances","Feedback","Behavior"],"answer":0,"topic":"HCI Factors"},{"id":"Q010","type":"situational","question":"A system includes many flashy tools that users rarely need, making the main work harder to complete. Which factor is least well balanced?","choices":["Comfort factors","System functionality","Environmental factors","Legibility"],"answer":1,"topic":"HCI Factors"},{"id":"Q011","type":"situational","question":"A warehouse app lets staff scan items more quickly and with fewer errors than the previous paper process. Which factor improved the most?","choices":["Visceral processing","Anthropology","Productivity factors","Card sorting"],"answer":2,"topic":"HCI Factors"},{"id":"Q012","type":"situational","question":"A student opens a website and immediately understands which buttons are available and where to start. Which interaction design principle is strongest?","choices":["Constraint","Voice interaction","Iteration","Visibility"],"answer":3,"topic":"Interaction Design Principles"},{"id":"Q013","type":"situational","question":"After a file is uploaded, the system shows a progress bar and a success message. Which principle is being demonstrated?","choices":["Feedback","Consistency","Affordance","Research"],"answer":0,"topic":"Interaction Design Principles"},{"id":"Q014","type":"situational","question":"Every \u0027Delete\u0027 button in an application is placed in the same area and behaves the same way on every screen. Which principle is this?","choices":["Visibility","Consistency","Behavior","Contextual inquiry"],"answer":1,"topic":"Interaction Design Principles"},{"id":"Q015","type":"situational","question":"A registration form blocks invalid symbols in the ID field before the user submits it. Which principle is preventing mistakes?","choices":["Feedback","Legibility","Constraints","Questionnaires"],"answer":2,"topic":"Interaction Design Principles"},{"id":"Q016","type":"situational","question":"A raised on-screen button with shading looks pressable even before the user touches it. Which principle explains why?","choices":["Iteration","Task analysis","Reflective processing","Affordances"],"answer":3,"topic":"Interaction Design Principles"},{"id":"Q017","type":"situational","question":"A commuter tries to buy a train ticket at a machine and hesitates because it is not clear which option will start the purchase. Which gulf is most obvious?","choices":["Gulf of Execution","Overlearning","Declarative memory","Card sorting"],"answer":0,"topic":"Psychology of Everyday Things"},{"id":"Q018","type":"situational","question":"A shopper clicks \u0027Place Order\u0027 but cannot tell whether the order went through because the screen does not change. Which gulf is most obvious?","choices":["Gulf of Execution","Gulf of Evaluation","Constraint gap","Task mismatch"],"answer":1,"topic":"Psychology of Everyday Things"},{"id":"Q019","type":"situational","question":"A fast-food kiosk becomes easier after a staff member explains where categories are and how to view the order summary. What helped the user bridge the problem?","choices":["More hardware power","Extra features","Design support that helps bridge the gulfs","A louder speaker"],"answer":2,"topic":"Psychology of Everyday Things"},{"id":"Q020","type":"situational","question":"A commuter decides to renew a pass, chooses the app, taps through options, submits the form, sees the confirmation, interprets it, and checks whether the goal was met. Which model best describes this sequence?","choices":["Five dimensions of interaction design","UCD methods","Discipline mapping","Seven stages of action"],"answer":3,"topic":"Seven Stages of Action"},{"id":"Q021","type":"situational","question":"A pianist performs a familiar piece smoothly without consciously thinking through each finger movement. Which idea best explains this?","choices":["Overlearning leads to automatic performance","Gulf of evaluation","Questionnaire bias","Legibility"],"answer":0,"topic":"Human Thought"},{"id":"Q022","type":"situational","question":"A student answers \u0027What is the capital of Argentina?\u0027 by recalling a fact learned in class. What type of memory is being used most?","choices":["Procedural memory","Declarative memory","Behavioral memory","Contextual memory"],"answer":1,"topic":"Human Thought"},{"id":"Q023","type":"situational","question":"Someone remembers whether an old door handle was on the left or right by mentally replaying the action of opening the door. What type of memory is most involved?","choices":["Declarative memory","Reflective memory","Procedural memory","Statistical memory"],"answer":2,"topic":"Human Thought"},{"id":"Q024","type":"situational","question":"A customer instantly distrusts a dirty, broken ATM before even trying it. Which processing level reacts first?","choices":["Reflective","Behavioral","Linguistic","Visceral"],"answer":3,"topic":"Human Cognition and Emotion"},{"id":"Q025","type":"situational","question":"A skilled typist enters text rapidly and almost automatically because the skill is well learned. Which level is most active during performance?","choices":["Behavioral","Visceral","Reflective","Environmental"],"answer":0,"topic":"Human Cognition and Emotion"},{"id":"Q026","type":"situational","question":"A buyer thinks carefully about whether a product matches their values and long-term goals before recommending it. Which processing level dominates?","choices":["Behavioral","Reflective","Visceral","Organizational"],"answer":1,"topic":"Human Cognition and Emotion"},{"id":"Q027","type":"situational","question":"A rude service interaction makes a customer avoid a company even though earlier experiences were acceptable. Which lesson from cognition and emotion fits best?","choices":["Users prefer more complexity","Procedural memory controls every decision","One nasty experience can spoil future experiences","Color scheme matters most"],"answer":2,"topic":"Human Cognition and Emotion"},{"id":"Q028","type":"situational","question":"A hotel voicemail system requires six unclear steps, different numbers for room and password, and repeated entries. What best describes the design?","choices":["Good design because it is secure","Good design because it has many features","Reflective design because it is memorable","Poor design because it obscures the correct path"],"answer":3,"topic":"Good vs Bad Design"},{"id":"Q029","type":"situational","question":"A marble-based answering machine shows the number of messages physically and makes the next action obvious. Why does it feel easier to use?","choices":["It maps actions and results more visibly","It hides functions better","It requires more training","It reduces all functionality"],"answer":0,"topic":"Good vs Bad Design"},{"id":"Q030","type":"situational","question":"A government website has cluttered pages, confusing labels, and irrelevant warnings. How would the slides most likely classify it?","choices":["Good design","Bad design","Behavioral design","User-centered design"],"answer":1,"topic":"Good vs Bad Design"},{"id":"Q031","type":"situational","question":"A team starts a ride-booking project by identifying target users, their needs, their problems, and the environment of use. Which process step is this?","choices":["Design evaluation","Build interactive prototypes","Identify user needs","Validation"],"answer":2,"topic":"Interaction Design Process"},{"id":"Q032","type":"situational","question":"Designers sketch several possible navigation layouts before picking one direction. Which process step is this?","choices":["Usability testing","Contextual inquiry","Deployment","Develop alternative designs"],"answer":3,"topic":"Interaction Design Process"},{"id":"Q033","type":"situational","question":"A clickable demo is built so stakeholders can experience the flow before coding begins. Which process step is this?","choices":["Build interactive prototypes","Research","Card sorting","Implementation"],"answer":0,"topic":"Interaction Design Process"},{"id":"Q034","type":"situational","question":"Test users try a prototype while observers record where confusion and errors occur. Which process step is happening?","choices":["Ideation","Design evaluation","Environment modeling","Productivity analysis"],"answer":1,"topic":"Interaction Design Process"},{"id":"Q035","type":"situational","question":"After testing reveals problems, the team modifies the interface and tests again. Which concept does this best show?","choices":["Static delivery","Command interaction","Iteration and refinement","Organizational control"],"answer":2,"topic":"Interaction Design Process"},{"id":"Q036","type":"situational","question":"A designer uses paper sketches to explore layout ideas quickly and cheaply. What type of prototype is being used?","choices":["High-fidelity prototype","Card sort","Final implementation","Low-fidelity prototype"],"answer":3,"topic":"Prototyping"},{"id":"Q037","type":"situational","question":"A team creates a realistic clickable app demo with polished screens for user testing. What type of prototype is this?","choices":["High-fidelity prototype","Low-fidelity prototype","Focus group","Journey map"],"answer":0,"topic":"Prototyping"},{"id":"Q038","type":"situational","question":"A delivery app is mainly used by riders in traffic, in bad weather, and while moving between locations. Which core component needs close attention besides users and tasks?","choices":["Sociology","Context of use","Declarative memory","Legibility only"],"answer":1,"topic":"Core Components of IxD"},{"id":"Q039","type":"situational","question":"A literacy app for children uses big icons, simple text, and guided steps. Which core component most directly shaped these choices?","choices":["Tasks","Behavior","Users","Time"],"answer":2,"topic":"Core Components of IxD"},{"id":"Q040","type":"situational","question":"A photo-editing program is structured mainly around cropping, filtering, and exporting images quickly. Which core component is most central here?","choices":["Context of use","Reflective processing","Social psychology","Tasks"],"answer":3,"topic":"Core Components of IxD"},{"id":"Q041","type":"situational","question":"An ATM presents options through a sequence of selectable lists. Which type of interaction is this?","choices":["Menu-based interaction","Command-based interaction","Touch-only interaction","Reflective interaction"],"answer":0,"topic":"Types of Interaction"},{"id":"Q042","type":"situational","question":"A UX team invites several intended users to discuss their opinions about a new checkout flow together. Which method are they using?","choices":["Card sorting","Focus groups","Contextual inquiry","Task analysis"],"answer":1,"topic":"UCD Methods"},{"id":"Q043","type":"situational","question":"A researcher needs a low-cost way to collect large amounts of statistical input about usersâ€™ needs. Which method fits best?","choices":["Interviews","Participatory design","Questionnaires and surveys","Usability testing"],"answer":2,"topic":"UCD Methods"},{"id":"Q044","type":"situational","question":"A researcher wants deep individual insight early in the design process and is willing to spend more time on each participant. Which method fits best?","choices":["Focus groups","Card sorting","Menu analysis","Interviews"],"answer":3,"topic":"UCD Methods"},{"id":"Q045","type":"situational","question":"A team wants to learn how users mentally group app content before redesigning navigation. Which method is most appropriate?","choices":["Card sorting","Usability testing","Questionnaires","Voice prototyping"],"answer":0,"topic":"UCD Methods"},{"id":"Q046","type":"situational","question":"A researcher observes people doing real tasks in their real workplace while also asking questions about what they are doing. Which validation technique is this?","choices":["Focus group","Contextual inquiry","Survey","Storyboarding"],"answer":1,"topic":"UCD Validation"},{"id":"Q047","type":"situational","question":"A product team keeps gathering user input from planning through post-release review instead of relying only on internal opinions. Which overall design approach does this reflect?","choices":["Feature-centered design","Engineering-only design","User-centered design","Aesthetic-first design"],"answer":2,"topic":"User-Centered Design"},{"id":"Q048","type":"situational","question":"A design team says, \u0027We will judge decisions by how well they work for end users, not by what is easiest for us.\u0027 Which UCD principle does this match most closely?","choices":["Ignore iteration","Prioritize launch speed","Use only internal opinions","Critical design decisions are evaluated based on how they work for end-users"],"answer":3,"topic":"UCD Principles"},{"id":"Q049","type":"situational","question":"A team creates user personas first so later feature and navigation decisions are based on realistic user groups. Which UCD process stage is this mainly part of?","choices":["Research","Ideation","Validation","Deployment"],"answer":0,"topic":"UCD Process"},{"id":"Q050","type":"situational","question":"A designer maps a userâ€™s steps, feelings, and touchpoints across a service to understand the whole experience. Which technique from the slides is this?","choices":["Card sorting","User journey mapping","Command interaction","Declarative recall"],"answer":1,"topic":"UCD Process"},{"id":"Q051","type":"memorization","question":"What does HCI stand for?","choices":["Human Computer Interface","Human Cognition Interface","Human-Computer Interaction","Human Centered Integration"],"answer":2,"topic":"HCI Basics"},{"id":"Q052","type":"memorization","question":"Which is a goal of HCI?","choices":["Increase task confusion","Remove user feedback","Prioritize machine needs over people","Achieve efficient, effective, and safe interaction"],"answer":3,"topic":"HCI Goals"},{"id":"Q053","type":"memorization","question":"Which is listed as an importance of HCI?","choices":["Ethical design","Password complexity","Compiler speed","Database indexing"],"answer":0,"topic":"HCI Importance"},{"id":"Q054","type":"memorization","question":"Which usability quality means a system should be easy to learn?","choices":["Easy to remember","Easy to learn","Safe to use","Enjoyable to use"],"answer":1,"topic":"Usability"},{"id":"Q055","type":"memorization","question":"Which usability quality means users should be able to use a system without danger or harm?","choices":["Effective to use","Easy to learn","Safe to use","Easy to remember"],"answer":2,"topic":"Usability"},{"id":"Q056","type":"memorization","question":"Which HCI factor refers to rules, policies, culture, and structure in a workplace?","choices":["Environmental factors","Comfort factors","Task factors","Organizational factors"],"answer":3,"topic":"HCI Factors"},{"id":"Q057","type":"memorization","question":"Which HCI factor includes lighting, noise, temperature, and available space?","choices":["Environmental factors","The user","System functionality","Productivity factors"],"answer":0,"topic":"HCI Factors"},{"id":"Q058","type":"memorization","question":"Which HCI factor focuses on age, skills, experience, and abilities?","choices":["Constraints","The user","Task factors","Organization"],"answer":1,"topic":"HCI Factors"},{"id":"Q059","type":"memorization","question":"Which HCI factor relates to posture, screen position, and ergonomics?","choices":["Productivity factors","Environmental factors","Comfort factors","Linguistics"],"answer":2,"topic":"HCI Factors"},{"id":"Q060","type":"memorization","question":"Which HCI factor is the part users directly interact with, such as screens, buttons, and menus?","choices":["System functionality","Task factors","Anthropology","User interface"],"answer":3,"topic":"HCI Factors"},{"id":"Q061","type":"memorization","question":"Which HCI factor includes task complexity, frequency, and time pressure?","choices":["Task factors","Comfort factors","Environmental factors","Philosophy"],"answer":0,"topic":"HCI Factors"},{"id":"Q062","type":"memorization","question":"Budget, time, legal requirements, and hardware limits are examples of what?","choices":["Affordances","Constraints","Feedback","Behavior"],"answer":1,"topic":"HCI Factors"},{"id":"Q063","type":"memorization","question":"What does system functionality refer to?","choices":["The user\u0027s age and skills","The room lighting and noise","The features and capabilities the system can provide","The cost of training"],"answer":2,"topic":"HCI Factors"},{"id":"Q064","type":"memorization","question":"Which factor focuses on helping users perform tasks faster, better, and with less effort?","choices":["Behavioral factors","Organizational factors","Questionnaire factors","Productivity factors"],"answer":3,"topic":"HCI Factors"},{"id":"Q065","type":"memorization","question":"Which discipline contributing to HCI studies mental processes and thinking?","choices":["Cognitive psychology","Civil engineering","Accounting","Marketing"],"answer":0,"topic":"Disciplines in HCI"},{"id":"Q066","type":"memorization","question":"Which discipline contributing to HCI studies how people behave in social situations?","choices":["Linguistics","Social psychology","Anthropology","Ergonomics"],"answer":1,"topic":"Disciplines in HCI"},{"id":"Q067","type":"memorization","question":"Which discipline contributing to HCI emphasizes posture, physical fit, and human limitations?","choices":["Philosophy","Artificial Intelligence","Ergonomics/Human Factors","Sociology"],"answer":2,"topic":"Disciplines in HCI"},{"id":"Q068","type":"memorization","question":"Which gulf occurs when people try to figure out how something operates?","choices":["Gulf of Evaluation","Gulf of Reflection","Gulf of Feedback","Gulf of Execution"],"answer":3,"topic":"Psychology of Everyday Things"},{"id":"Q069","type":"memorization","question":"Which gulf occurs when people try to figure out what happened after acting?","choices":["Gulf of Evaluation","Gulf of Execution","Gulf of Prototyping","Gulf of Interaction"],"answer":0,"topic":"Psychology of Everyday Things"},{"id":"Q070","type":"memorization","question":"Which stage comes first in the seven stages of action?","choices":["Perform","Goal","Specify","Interpret"],"answer":1,"topic":"Seven Stages of Action"},{"id":"Q071","type":"memorization","question":"Which stage follows Goal in the seven stages of action?","choices":["Perceive","Compare","Plan","Perform"],"answer":2,"topic":"Seven Stages of Action"},{"id":"Q072","type":"memorization","question":"Which stage means carrying out the action sequence?","choices":["Interpret","Specify","Compare","Perform"],"answer":3,"topic":"Seven Stages of Action"},{"id":"Q073","type":"memorization","question":"Which stage means sensing the state of the world after acting?","choices":["Perceive","Plan","Goal","Specify"],"answer":0,"topic":"Seven Stages of Action"},{"id":"Q074","type":"memorization","question":"Which stage means judging the outcome against the original goal?","choices":["Perceive","Compare","Plan","Goal"],"answer":1,"topic":"Seven Stages of Action"},{"id":"Q075","type":"memorization","question":"Most of the brain\u0027s operations are described in the slides as:","choices":["Fully conscious","Entirely emotional","Mostly subconscious","Only reflective"],"answer":2,"topic":"Human Thought"},{"id":"Q076","type":"memorization","question":"Memory for facts such as capitals or phone numbers is called:","choices":["Procedural memory","Behavioral memory","Contextual memory","Declarative memory"],"answer":3,"topic":"Human Thought"},{"id":"Q077","type":"memorization","question":"Memory for how to perform actions is called:","choices":["Procedural memory","Reflective memory","Statistical memory","Verbal memory"],"answer":0,"topic":"Human Thought"},{"id":"Q078","type":"memorization","question":"Which processing level is the most basic and instinctive?","choices":["Reflective","Visceral","Behavioral","Analytical"],"answer":1,"topic":"Human Cognition and Emotion"},{"id":"Q079","type":"memorization","question":"Which processing level is the home of learned skills?","choices":["Visceral","Reflective","Behavioral","Ethical"],"answer":2,"topic":"Human Cognition and Emotion"},{"id":"Q080","type":"memorization","question":"Which processing level is the home of conscious cognition?","choices":["Behavioral","Visceral","Environmental","Reflective"],"answer":3,"topic":"Human Cognition and Emotion"},{"id":"Q081","type":"memorization","question":"Which kind of design is described as transparent, simple, relevant, and easy to understand?","choices":["Good design","Bad design","Hidden design","Overdesigned system"],"answer":0,"topic":"Good vs Bad Design"},{"id":"Q082","type":"memorization","question":"Which is a characteristic of bad design?","choices":["Clear navigation","Cluttered interface","Relevant feedback","Effective goal support"],"answer":1,"topic":"Good vs Bad Design"},{"id":"Q083","type":"memorization","question":"What is interaction design?","choices":["Programming databases only","Decorating screens with color","Designing interactive products to support how people communicate and interact","Writing code without users"],"answer":2,"topic":"Interaction Design"},{"id":"Q084","type":"memorization","question":"What is the main goal of interaction design?","choices":["Maximize code length","Remove all constraints","Increase hardware cost","Make systems useful, usable, and satisfying"],"answer":3,"topic":"Interaction Design"},{"id":"Q085","type":"memorization","question":"Which dimension of interaction design refers to text such as button labels?","choices":["1D: Words","2D: Visual representations","3D: Physical objects/space","4D: Time"],"answer":0,"topic":"Five Dimensions of IxD"},{"id":"Q086","type":"memorization","question":"Which dimension refers to images, icons, and typography?","choices":["1D: Words","2D: Visual representations","4D: Time","5D: Behavior"],"answer":1,"topic":"Five Dimensions of IxD"},{"id":"Q087","type":"memorization","question":"Which dimension refers to the medium through which users interact, such as a mouse or fingers?","choices":["2D: Visual representations","5D: Behavior","3D: Physical objects/space","1D: Words"],"answer":2,"topic":"Five Dimensions of IxD"},{"id":"Q088","type":"memorization","question":"Which dimension refers to animations, sound, and media that change over time?","choices":["3D: Physical objects/space","2D: Visual representations","1D: Words","4D: Time"],"answer":3,"topic":"Five Dimensions of IxD"},{"id":"Q089","type":"memorization","question":"Which dimension refers to how the product reacts to users\u0027 inputs?","choices":["5D: Behavior","4D: Time","2D: Visual representations","1D: Words"],"answer":0,"topic":"Five Dimensions of IxD"},{"id":"Q090","type":"memorization","question":"Compared with UCD, which approach is broader and focuses on holistic human needs, emotions, and societal impact?","choices":["Card sorting","Human-Centered Design (HCD)","Behavioral design","Command-based interaction"],"answer":1,"topic":"HCD vs UCD"},{"id":"Q091","type":"memorization","question":"Which principle says users should easily see what actions are possible?","choices":["Consistency","Constraints","Visibility","Behavior"],"answer":2,"topic":"Interaction Design Principles"},{"id":"Q092","type":"memorization","question":"Which principle says the system should inform users what is happening after an action?","choices":["Affordances","Legibility","Iteration","Feedback"],"answer":3,"topic":"Interaction Design Principles"},{"id":"Q093","type":"memorization","question":"Which principle means similar actions should behave in the same way throughout the system?","choices":["Consistency","Visibility","Constraints","Research"],"answer":0,"topic":"Interaction Design Principles"},{"id":"Q094","type":"memorization","question":"Which principle means design elements should suggest how they are used?","choices":["Feedback","Affordances","Time","Validation"],"answer":1,"topic":"Interaction Design Principles"},{"id":"Q095","type":"memorization","question":"Which type of interaction is exemplified by a terminal or command prompt?","choices":["Touch interaction","Voice interaction","Command-based interaction","Menu-based interaction"],"answer":2,"topic":"Types of Interaction"},{"id":"Q096","type":"memorization","question":"Which type of interaction is exemplified by desktop operating systems?","choices":["Voice interaction","Menu-based interaction","Participatory design","Graphical User Interface (GUI)"],"answer":3,"topic":"Types of Interaction"},{"id":"Q097","type":"memorization","question":"Which UCD principle says users should be involved from the very beginning?","choices":["Involve users from the very beginning","Ignore user feedback","Design once only","Favor internal opinions"],"answer":0,"topic":"UCD Principles"},{"id":"Q098","type":"memorization","question":"Which essential UCD element means text should be easy to read?","choices":["Accessibility","Legibility","Visibility","Language"],"answer":1,"topic":"UCD Essentials"},{"id":"Q099","type":"memorization","question":"Which UCD method is used primarily to test and design information architecture?","choices":["Focus groups","Interviews","Card sorting","Surveys"],"answer":2,"topic":"UCD Methods"},{"id":"Q100","type":"memorization","question":"Which three-stage UCD flow is shown in the slides?","choices":["Research, Coding, Launch","Planning, Sales, Support","Observe, Build, Forget","Research, Ideation, Validation"],"answer":3,"topic":"UCD Process"}]}</script>
+
+  <script>
+    const rawQuiz = JSON.parse(document.getElementById('quizData').textContent);
+
+    function repairText(value) {
+      return String(value)
+        .replaceAll('â€™', "'")
+        .replaceAll('â€œ', '"')
+        .replaceAll('â€', '"')
+        .replaceAll('â€”', '-')
+        .replaceAll('â€“', '-')
+        .replaceAll('Â·', '·')
+        .replaceAll('Ã—', 'x')
+        .replaceAll(' ', ' ');
+    }
+
+    function normalizeQuizData(data) {
+      return {
+        ...data,
+        quiz_title: repairText(data.quiz_title),
+        source_presentations: data.source_presentations.map(repairText),
+        items: data.items.map(item => ({
+          ...item,
+          type: repairText(item.type),
+          topic: repairText(item.topic),
+          question: repairText(item.question),
+          choices: item.choices.map(repairText)
+        }))
+      };
+    }
+
+    const quizData = normalizeQuizData(rawQuiz);
+    const answers = new Map();
+    let currentItems = [...quizData.items];
+
+    const typeFilter = document.getElementById('typeFilter');
+    const topicFilter = document.getElementById('topicFilter');
+    const sortMode = document.getElementById('sortMode');
+    const questionsGrid = document.getElementById('questionsGrid');
+    const sourceList = document.getElementById('sourceList');
+
+    function shuffleArray(items) {
+      const copy = [...items];
+      for (let i = copy.length - 1; i > 0; i -= 1) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [copy[i], copy[j]] = [copy[j], copy[i]];
+      }
+      return copy;
+    }
+
+    function buildFilterOptions() {
+      const types = [...new Set(quizData.items.map(item => item.type))];
+      const topics = [...new Set(quizData.items.map(item => item.topic))].sort((a, b) => a.localeCompare(b));
+
+      types.forEach(type => {
+        const option = document.createElement('option');
+        option.value = type;
+        option.textContent = type[0].toUpperCase() + type.slice(1);
+        typeFilter.appendChild(option);
+      });
+
+      topics.forEach(topic => {
+        const option = document.createElement('option');
+        option.value = topic;
+        option.textContent = topic;
+        topicFilter.appendChild(option);
+      });
+    }
+
+    function updateScoreboard() {
+      const visibleIds = currentItems.map(item => item.id);
+      const answeredVisible = visibleIds.filter(id => answers.has(id));
+      const correctVisible = answeredVisible.filter(id => {
+        const item = currentItems.find(entry => entry.id === id);
+        return item && answers.get(id) === item.answer;
+      });
+      const answeredCount = answeredVisible.length;
+      const correctCount = correctVisible.length;
+      const totalCount = currentItems.length;
+      const remainingCount = Math.max(totalCount - answeredCount, 0);
+      const accuracy = answeredCount ? Math.round((correctCount / answeredCount) * 100) : 0;
+
+      document.getElementById('answeredCount').textContent = String(answeredCount);
+      document.getElementById('correctCount').textContent = String(correctCount);
+      document.getElementById('accuracyValue').textContent = `${accuracy}%`;
+      document.getElementById('remainingCount').textContent = String(remainingCount);
+      document.getElementById('progressFill').style.width = totalCount ? `${(answeredCount / totalCount) * 100}%` : '0%';
+      document.getElementById('progressCopy').textContent = `${answeredCount} of ${totalCount} questions answered.`;
+    }
+
+    function createChoiceButton(item, choiceText, originalIndex, selectedIndex) {
+      const button = document.createElement('button');
+      button.className = 'choice';
+      button.type = 'button';
+      button.textContent = choiceText;
+
+      if (selectedIndex === originalIndex) {
+        button.classList.add('selected');
+      }
+
+      if (selectedIndex !== undefined) {
+        if (originalIndex === item.answer) {
+          button.classList.add('correct');
+        } else if (selectedIndex === originalIndex && selectedIndex !== item.answer) {
+          button.classList.add('incorrect');
+        }
+      }
+
+      button.addEventListener('click', () => {
+        answers.set(item.id, originalIndex);
+        renderQuestions();
+        const card = document.getElementById(`card-${item.id}`);
+        if (card) {
+          card.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }
+      });
+
+      return button;
+    }
+
+    function createQuestionCard(item, displayIndex) {
+      const card = document.createElement('article');
+      card.className = 'question-card';
+      card.id = `card-${item.id}`;
+
+      const selectedIndex = answers.get(item.id);
+      const isAnswered = selectedIndex !== undefined;
+      const isCorrect = selectedIndex === item.answer;
+
+      const top = document.createElement('div');
+      top.className = 'question-top';
+      top.innerHTML = `
+        <div>
+          <div class="question-id">${item.id} · ${displayIndex + 1}</div>
+          <div class="question-meta">${item.type}</div>
+        </div>
+        <div class="topic-chip">${item.topic}</div>
+      `;
+
+      const questionText = document.createElement('div');
+      questionText.className = 'question-text';
+      questionText.textContent = item.question;
+
+      const choicesWrap = document.createElement('div');
+      choicesWrap.className = 'choices';
+
+      item.choices.forEach((choiceText, index) => {
+        choicesWrap.appendChild(createChoiceButton(item, choiceText, index, selectedIndex));
+      });
+
+      const actions = document.createElement('div');
+      actions.className = 'question-actions';
+
+      const revealButton = document.createElement('button');
+      revealButton.type = 'button';
+      revealButton.textContent = isAnswered ? 'Answered' : 'Reveal Answer';
+      revealButton.addEventListener('click', () => {
+        answers.set(item.id, item.answer);
+        renderQuestions();
+      });
+
+      const clearButton = document.createElement('button');
+      clearButton.type = 'button';
+      clearButton.textContent = 'Clear';
+      clearButton.addEventListener('click', () => {
+        answers.delete(item.id);
+        renderQuestions();
+      });
+
+      actions.append(revealButton, clearButton);
+
+      const status = document.createElement('div');
+      status.className = `question-status ${isAnswered ? 'visible' : ''} ${isCorrect ? 'correct' : 'incorrect'}`;
+
+      if (isAnswered) {
+        status.innerHTML = `
+          <div class="status-head">${isCorrect ? 'Correct answer locked in.' : 'Not quite.'}</div>
+          <div class="status-copy">Correct answer: <strong>${item.choices[item.answer]}</strong></div>
+        `;
+      }
+
+      card.append(top, questionText, choicesWrap, actions, status);
+      return card;
+    }
+
+    function renderQuestions() {
+      questionsGrid.innerHTML = '';
+
+      if (!currentItems.length) {
+        const empty = document.createElement('div');
+        empty.className = 'empty-state';
+        empty.textContent = 'No questions match the current filters.';
+        questionsGrid.appendChild(empty);
+        updateScoreboard();
+        return;
+      }
+
+      currentItems.forEach((item, index) => {
+        questionsGrid.appendChild(createQuestionCard(item, index));
+      });
+
+      updateScoreboard();
+    }
+
+    function applyFilters() {
+      const chosenType = typeFilter.value;
+      const chosenTopic = topicFilter.value;
+      const order = sortMode.value;
+
+      let filtered = [...quizData.items];
+
+      if (chosenType !== 'all') {
+        filtered = filtered.filter(item => item.type === chosenType);
+      }
+
+      if (chosenTopic !== 'all') {
+        filtered = filtered.filter(item => item.topic === chosenTopic);
+      }
+
+      currentItems = order === 'shuffle' ? shuffleArray(filtered) : filtered;
+      renderQuestions();
+    }
+
+    function renderSources() {
+      quizData.source_presentations.forEach(source => {
+        const item = document.createElement('div');
+        item.className = 'source-item';
+        item.textContent = source;
+        sourceList.appendChild(item);
+      });
+    }
+
+    document.getElementById('applyFilters').addEventListener('click', applyFilters);
+    document.getElementById('shuffleAgainButton').addEventListener('click', () => {
+      sortMode.value = 'shuffle';
+      applyFilters();
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    });
+    document.getElementById('resetProgress').addEventListener('click', () => {
+      answers.clear();
+      renderQuestions();
+    });
+    document.getElementById('revealAll').addEventListener('click', () => {
+      currentItems.forEach(item => answers.set(item.id, item.answer));
+      renderQuestions();
+    });
+    document.getElementById('scrollTopButton').addEventListener('click', () => {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    });
+
+    buildFilterOptions();
+    renderSources();
+    applyFilters();
+
+    (function() {
+      const canvas = document.getElementById('cursorCanvas');
+      const ctx = canvas.getContext('2d');
+      const points = [];
+      const mouse = { x: window.innerWidth / 2, y: window.innerHeight / 2 };
+      const cols = 7;
+      const rows = 4;
+
+      function resize() {
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+        initPoints();
+      }
+
+      function initPoints() {
+        points.length = 0;
+        for (let row = 0; row < rows; row += 1) {
+          for (let col = 0; col < cols; col += 1) {
+            const x = ((col + 0.5) * canvas.width) / cols + (Math.random() - 0.5) * 80;
+            const y = ((row + 0.5) * canvas.height) / rows + (Math.random() - 0.5) * 60;
+            points.push({ x, y, r: 1.5 + Math.random() * 1.6 });
+          }
+        }
+      }
+
+      function draw() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        points.forEach(point => {
+          const dx = mouse.x - point.x;
+          const dy = mouse.y - point.y;
+          const dist = Math.hypot(dx, dy);
+          const strength = Math.max(0, 1 - dist / 420);
+
+          if (strength > 0.02) {
+            ctx.strokeStyle = `rgba(0,212,255,${0.18 * strength})`;
+            ctx.lineWidth = 1;
+            ctx.beginPath();
+            ctx.moveTo(point.x, point.y);
+            ctx.lineTo(mouse.x - dx * 0.1, mouse.y - dy * 0.1);
+            ctx.stroke();
+          }
+
+          ctx.save();
+          ctx.shadowColor = 'rgba(0,212,255,0.9)';
+          ctx.shadowBlur = 14 * strength + 2;
+          ctx.fillStyle = `rgba(0,212,255,${0.35 + strength * 0.35})`;
+          ctx.beginPath();
+          ctx.arc(point.x, point.y, point.r + strength * 1.1, 0, Math.PI * 2);
+          ctx.fill();
+          ctx.restore();
+        });
+
+        requestAnimationFrame(draw);
+      }
+
+      window.addEventListener('mousemove', event => {
+        mouse.x = event.clientX;
+        mouse.y = event.clientY;
+      });
+      window.addEventListener('resize', resize);
+      resize();
+      draw();
+    })();
+  </script>
+</body>
+</html>
