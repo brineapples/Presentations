@@ -27,7 +27,9 @@
 
   body {
     font-family: 'DM Sans', sans-serif;
-    background: var(--blue-900);
+    background: radial-gradient(circle at top left, rgba(0,212,255,0.08), transparent 22%),
+                radial-gradient(circle at 85% 10%, rgba(0,102,255,0.12), transparent 16%),
+                var(--blue-900);
     color: var(--white);
     min-height: 100vh;
     display: flex;
@@ -40,10 +42,29 @@
   .grid-overlay {
     position: fixed; inset: 0;
     background-image:
-      linear-gradient(rgba(0,212,255,0.04) 1px, transparent 1px),
-      linear-gradient(90deg, rgba(0,212,255,0.04) 1px, transparent 1px);
+      linear-gradient(rgba(0,212,255,0.06) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(0,212,255,0.06) 1px, transparent 1px);
     background-size: 60px 60px;
     pointer-events: none;
+    z-index: 1;
+  }
+
+  .cursor-canvas {
+    position: fixed;
+    inset: 0;
+    z-index: 0;
+    pointer-events: none;
+  }
+
+  .track-lines {
+    position: fixed;
+    inset: 0;
+    z-index: 0;
+    pointer-events: none;
+    background:
+      radial-gradient(circle at 15% 10%, rgba(0,212,255,0.12), transparent 18%),
+      radial-gradient(circle at 80% 20%, rgba(0,102,255,0.1), transparent 16%),
+      radial-gradient(circle at 30% 85%, rgba(65,163,232,0.08), transparent 22%);
   }
 
   .glow-orb {
@@ -144,6 +165,8 @@
 </style>
 </head>
 <body>
+  <canvas id="cursorCanvas" class="cursor-canvas"></canvas>
+  <div class="track-lines"></div>
   <div class="grid-overlay"></div>
   <div class="glow-orb a"></div>
   <div class="glow-orb b"></div>
@@ -173,6 +196,72 @@
       Add new presentations above this line
     </div>
   </div>
+
+  <script>
+    (function() {
+      const canvas = document.getElementById('cursorCanvas');
+      const ctx = canvas.getContext('2d');
+      const points = [];
+      const mouse = { x: window.innerWidth / 2, y: window.innerHeight / 2 };
+      const cols = 7;
+      const rows = 4;
+
+      function resize() {
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+        initPoints();
+      }
+
+      function initPoints() {
+        points.length = 0;
+        for (let row = 0; row < rows; row++) {
+          for (let col = 0; col < cols; col++) {
+            const x = (col + 0.5) * canvas.width / cols + (Math.random() - 0.5) * 80;
+            const y = (row + 0.5) * canvas.height / rows + (Math.random() - 0.5) * 60;
+            points.push({ x, y, r: 1.5 + Math.random() * 1.6 });
+          }
+        }
+      }
+
+      function draw() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        points.forEach(point => {
+          const dx = mouse.x - point.x;
+          const dy = mouse.y - point.y;
+          const dist = Math.hypot(dx, dy);
+          const strength = Math.max(0, 1 - dist / 420);
+
+          if (strength > 0.02) {
+            ctx.strokeStyle = `rgba(0,212,255,${0.18 * strength})`;
+            ctx.lineWidth = 1;
+            ctx.beginPath();
+            ctx.moveTo(point.x, point.y);
+            ctx.lineTo(mouse.x - dx * 0.1, mouse.y - dy * 0.1);
+            ctx.stroke();
+          }
+
+          ctx.save();
+          ctx.shadowColor = 'rgba(0,212,255,0.9)';
+          ctx.shadowBlur = 14 * strength + 2;
+          ctx.fillStyle = `rgba(0,212,255,${0.35 + strength * 0.35})`;
+          ctx.beginPath();
+          ctx.arc(point.x, point.y, point.r + strength * 1.1, 0, Math.PI * 2);
+          ctx.fill();
+          ctx.restore();
+        });
+
+        requestAnimationFrame(draw);
+      }
+
+      window.addEventListener('mousemove', event => {
+        mouse.x = event.clientX;
+        mouse.y = event.clientY;
+      });
+      window.addEventListener('resize', resize);
+      resize();
+      draw();
+    })();
+  </script>
 </body>
 </html></content>
 <parameter name="filePath">c:\Users\nulln\source\repos\Presentations\index.html
