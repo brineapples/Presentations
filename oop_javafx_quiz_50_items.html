@@ -1,0 +1,707 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>BSIT OOP Chapter 08 - JavaFX 50-Item Quiz</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&family=DM+Mono:wght@400;500&family=DM+Sans:wght@300;400;500;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --blue-950: #010713;
+    --blue-900: #020b18;
+    --blue-800: #061629;
+    --blue-700: #0a2540;
+    --blue-600: #0e3a60;
+    --blue-500: #1258a8;
+    --blue-400: #1e7fcb;
+    --blue-300: #41a3e8;
+    --blue-200: #7dc4f5;
+    --blue-100: #c0e2fc;
+    --accent: #00d4ff;
+    --green: #47d48f;
+    --red: #ff6b81;
+    --white: #f0f8ff;
+    --text-muted: rgba(160, 210, 255, 0.58);
+    --card-border: rgba(0, 212, 255, 0.14);
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background:
+      radial-gradient(circle at top left, rgba(0, 212, 255, 0.08), transparent 22%),
+      radial-gradient(circle at 85% 10%, rgba(0, 102, 255, 0.12), transparent 16%),
+      var(--blue-900);
+    color: var(--white);
+    min-height: 100vh;
+    padding: 1.1rem;
+    overflow-x: hidden;
+    -webkit-text-size-adjust: 100%;
+  }
+
+  .grid-overlay, .track-lines, .cursor-canvas, .glow-orb { position: fixed; inset: 0; pointer-events: none; }
+  .grid-overlay {
+    background-image:
+      linear-gradient(rgba(0, 212, 255, 0.06) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(0, 212, 255, 0.06) 1px, transparent 1px);
+    background-size: 60px 60px;
+    z-index: 1;
+  }
+  .track-lines {
+    z-index: 0;
+    background:
+      radial-gradient(circle at 15% 10%, rgba(0, 212, 255, 0.12), transparent 18%),
+      radial-gradient(circle at 80% 20%, rgba(0, 102, 255, 0.1), transparent 16%),
+      radial-gradient(circle at 30% 85%, rgba(65, 163, 232, 0.08), transparent 22%);
+  }
+  .cursor-canvas { z-index: 0; }
+  .glow-orb { border-radius: 50%; filter: blur(80px); opacity: 0.35; z-index: 0; }
+  .glow-orb.a {
+    width: 560px; height: 560px;
+    background: radial-gradient(circle, #0a3d8f 0%, transparent 70%);
+    top: -12%; left: -14%;
+  }
+  .glow-orb.b {
+    width: 420px; height: 420px;
+    background: radial-gradient(circle, #00b4d8 0%, transparent 70%);
+    bottom: 4%; right: -10%;
+  }
+
+  .page-shell {
+    position: relative;
+    z-index: 2;
+    width: min(1280px, 100%);
+    margin: 0 auto;
+  }
+
+  .back-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.55rem;
+    text-decoration: none;
+    color: var(--blue-100);
+    font-family: 'DM Mono', monospace;
+    font-size: 0.7rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    margin-bottom: 1.2rem;
+  }
+
+  .hero, .toolbar {
+    display: grid;
+    grid-template-columns: minmax(0, 1.15fr) minmax(320px, 0.85fr);
+    gap: 1rem;
+  }
+
+  .panel, .question-card {
+    background: rgba(6, 22, 41, 0.7);
+    border: 1px solid var(--card-border);
+    border-radius: 22px;
+    backdrop-filter: blur(12px);
+    box-shadow: inset 0 0 0 1px rgba(255,255,255,0.025);
+  }
+
+  .panel { padding: 1.25rem; }
+  .hero-copy-panel { padding: 1.55rem; }
+
+  .eyebrow, .panel-label, .question-meta, .tag {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.68rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+  }
+
+  .eyebrow { color: var(--accent); margin-bottom: 0.9rem; }
+  .panel-label { color: var(--text-muted); }
+
+  .hero-title {
+    font-family: 'Inter', sans-serif;
+    font-size: clamp(2rem, 5vw, 4.2rem);
+    line-height: 0.95;
+    letter-spacing: -0.03em;
+    font-weight: 800;
+    max-width: 10ch;
+    background: linear-gradient(135deg, #ffffff 30%, var(--blue-200) 60%, var(--accent) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .hero-copy, .loading-state, .empty-state, .status-copy, .explanation, .meta-line {
+    line-height: 1.65;
+    color: var(--blue-100);
+    font-size: 0.95rem;
+  }
+
+  .hero-copy { margin-top: 1rem; max-width: 58ch; }
+
+  .pill-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.7rem;
+    margin-top: 1.3rem;
+  }
+
+  .pill {
+    padding: 0.48rem 0.78rem;
+    border-radius: 999px;
+    border: 1px solid rgba(0, 212, 255, 0.2);
+    background: rgba(0, 212, 255, 0.06);
+    font-family: 'DM Mono', monospace;
+    font-size: 0.66rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--blue-100);
+  }
+
+  .stats-grid, .filters-grid {
+    display: grid;
+    gap: 0.8rem;
+    margin-top: 0.9rem;
+  }
+
+  .stats-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .filters-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+
+  .stat, .source-box {
+    border-radius: 16px;
+    background: rgba(2, 11, 24, 0.6);
+    border: 1px solid rgba(0, 212, 255, 0.12);
+    padding: 0.95rem;
+  }
+
+  .stat strong {
+    display: block;
+    font-family: 'Inter', sans-serif;
+    font-size: 1.12rem;
+    margin-bottom: 0.25rem;
+  }
+  .stat span { color: var(--text-muted); font-size: 0.82rem; }
+
+  .field label {
+    display: block;
+    margin-bottom: 0.38rem;
+    color: var(--blue-100);
+    font-size: 0.86rem;
+  }
+  .field select, .field button, .choice, .action-button {
+    width: 100%;
+    border-radius: 14px;
+    border: 1px solid rgba(0, 212, 255, 0.18);
+    background: rgba(2, 11, 24, 0.72);
+    color: var(--white);
+    padding: 0.8rem 0.95rem;
+    font: inherit;
+  }
+  .field button, .action-button, .choice {
+    cursor: pointer;
+  }
+
+  .progress-wrap { margin-top: 1rem; }
+  .progress-bar {
+    width: 100%;
+    height: 10px;
+    border-radius: 999px;
+    background: rgba(255,255,255,0.08);
+    overflow: hidden;
+  }
+  .progress-fill {
+    width: 0;
+    height: 100%;
+    background: linear-gradient(90deg, var(--accent), var(--blue-300));
+    transition: width 0.25s ease;
+  }
+  .progress-copy { margin-top: 0.6rem; color: var(--blue-200); font-size: 0.9rem; }
+
+  .question-list {
+    display: grid;
+    gap: 1rem;
+    margin-top: 1rem;
+  }
+
+  .question-card { padding: 1.2rem; }
+  .question-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: start;
+    gap: 1rem;
+    margin-bottom: 0.8rem;
+  }
+  .question-id { color: var(--accent); }
+  .tag {
+    color: var(--blue-100);
+    background: rgba(0,212,255,0.08);
+    border: 1px solid rgba(0,212,255,0.14);
+    padding: 0.35rem 0.6rem;
+    border-radius: 999px;
+    letter-spacing: 0.1em;
+    white-space: nowrap;
+  }
+  .question-text {
+    font-size: 1rem;
+    line-height: 1.6;
+    color: var(--white);
+    margin-bottom: 0.9rem;
+  }
+  .choices {
+    display: grid;
+    gap: 0.65rem;
+  }
+  .choice {
+    text-align: left;
+    line-height: 1.5;
+    transition: border-color 0.2s ease, background 0.2s ease, transform 0.2s ease;
+  }
+  .choice:hover { transform: translateY(-1px); border-color: rgba(0, 212, 255, 0.3); }
+  .choice.selected {
+    border-color: rgba(0, 212, 255, 0.4);
+    background: rgba(0, 212, 255, 0.11);
+  }
+  .choice.correct {
+    border-color: rgba(71, 212, 143, 0.52);
+    background: rgba(71, 212, 143, 0.14);
+  }
+  .choice.incorrect {
+    border-color: rgba(255, 107, 129, 0.48);
+    background: rgba(255, 107, 129, 0.12);
+  }
+
+  .actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.7rem;
+    margin-top: 0.95rem;
+  }
+  .action-button { width: auto; min-width: 150px; background: rgba(0, 212, 255, 0.06); }
+
+  .status-box {
+    display: none;
+    margin-top: 0.95rem;
+    border-radius: 16px;
+    padding: 0.95rem;
+    background: rgba(2, 11, 24, 0.72);
+    border: 1px solid rgba(0, 212, 255, 0.12);
+  }
+  .status-box.visible { display: block; }
+  .status-box.correct { border-color: rgba(71, 212, 143, 0.35); }
+  .status-box.incorrect { border-color: rgba(255, 107, 129, 0.35); }
+  .status-title {
+    font-family: 'Inter', sans-serif;
+    font-size: 0.98rem;
+    font-weight: 700;
+    margin-bottom: 0.35rem;
+  }
+  .explanation {
+    margin-top: 0.7rem;
+    padding-top: 0.7rem;
+    border-top: 1px solid rgba(255,255,255,0.06);
+  }
+
+  .footer-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    margin-top: 1rem;
+  }
+
+  .loading-state, .empty-state {
+    padding: 2rem 1rem;
+    text-align: center;
+  }
+
+  @media (max-width: 980px) {
+    .hero, .toolbar { grid-template-columns: 1fr; }
+  }
+
+  @media (max-width: 640px) {
+    body { padding: 0.9rem; }
+    .hero-copy-panel, .panel, .question-card { padding: 1rem; border-radius: 18px; }
+    .hero-title { font-size: clamp(1.9rem, 10vw, 3.2rem); max-width: 9ch; }
+    .stats-grid, .filters-grid { grid-template-columns: 1fr; }
+    .question-top { flex-direction: column; gap: 0.65rem; }
+    .tag { white-space: normal; }
+    .field select, .field button, .choice, .action-button { min-height: 48px; }
+  }
+</style>
+</head>
+<body>
+  <canvas id="cursorCanvas" class="cursor-canvas"></canvas>
+  <div class="track-lines"></div>
+  <div class="grid-overlay"></div>
+  <div class="glow-orb a"></div>
+  <div class="glow-orb b"></div>
+
+  <main class="page-shell">
+    <a class="back-link" href="index.html">← Back to Resource Hub</a>
+
+    <section class="hero">
+      <div class="panel hero-copy-panel">
+        <div class="eyebrow">OOP Quiz System</div>
+        <h1 class="hero-title">JavaFX chapter review, 50 items.</h1>
+        <p class="hero-copy">
+          This quiz is generated from your OOP schema structure, including topic labels, explanations,
+          source pages, score tracking, and retry support. Same visual direction as the HCI quiz,
+          but adapted for this schema’s fields instead of the older question-type layout.
+        </p>
+        <div class="pill-row" id="heroPills"></div>
+      </div>
+
+      <aside class="panel">
+        <div class="panel-label">Quiz Snapshot</div>
+        <div class="stats-grid" id="heroStats"></div>
+      </aside>
+    </section>
+
+    <section class="toolbar">
+      <div class="panel">
+        <div class="panel-label">Filters and Actions</div>
+        <div class="filters-grid">
+          <div class="field">
+            <label for="topicFilter">Topic</label>
+            <select id="topicFilter"><option value="all">All topics</option></select>
+          </div>
+          <div class="field">
+            <label for="sortMode">Order</label>
+            <select id="sortMode">
+              <option value="default">Default order</option>
+              <option value="shuffle">Shuffle questions</option>
+            </select>
+          </div>
+          <div class="field">
+            <label>&nbsp;</label>
+            <button id="applyFilters" type="button">Apply Filters</button>
+          </div>
+          <div class="field">
+            <label>&nbsp;</label>
+            <button id="resetProgress" type="button">Reset Progress</button>
+          </div>
+        </div>
+      </div>
+
+      <aside class="panel">
+        <div class="panel-label">Live Scoreboard</div>
+        <div class="stats-grid">
+          <div class="stat"><strong id="answeredCount">0</strong><span>Answered</span></div>
+          <div class="stat"><strong id="correctCount">0</strong><span>Correct</span></div>
+          <div class="stat"><strong id="accuracyValue">0%</strong><span>Accuracy</span></div>
+          <div class="stat"><strong id="remainingCount">0</strong><span>Remaining</span></div>
+        </div>
+        <div class="progress-wrap">
+          <div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div>
+          <div class="progress-copy" id="progressCopy">Loading quiz...</div>
+        </div>
+      </aside>
+    </section>
+
+    <section class="question-list" id="questionList">
+      <div class="loading-state">Loading OOP quiz schema...</div>
+    </section>
+  </main>
+
+  <script>
+    const questionList = document.getElementById('questionList');
+    const topicFilter = document.getElementById('topicFilter');
+    const sortMode = document.getElementById('sortMode');
+    const answers = new Map();
+    let schema = null;
+    let currentQuestions = [];
+
+    function repairText(value) {
+      return String(value)
+        .replaceAll('â€™', "'")
+        .replaceAll('â€œ', '"')
+        .replaceAll('â€', '"')
+        .replaceAll('â€”', '-')
+        .replaceAll('â€“', '-')
+        .replaceAll('Â·', '·')
+        .replaceAll('Ã—', 'x')
+        .replaceAll(' ', ' ');
+    }
+
+    function normalizeSchema(raw) {
+      return {
+        ...raw,
+        quiz_title: repairText(raw.quiz_title),
+        source_file: repairText(raw.source_file),
+        instructions: (raw.instructions || []).map(repairText),
+        questions: (raw.questions || []).map(question => ({
+          ...question,
+          topic: repairText(question.topic),
+          question: repairText(question.question),
+          explanation: repairText(question.explanation),
+          choices: (question.choices || []).map(repairText)
+        }))
+      };
+    }
+
+    function shuffleArray(items) {
+      const copy = [...items];
+      for (let i = copy.length - 1; i > 0; i -= 1) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [copy[i], copy[j]] = [copy[j], copy[i]];
+      }
+      return copy;
+    }
+
+    function renderSummary() {
+      const heroPills = document.getElementById('heroPills');
+      const heroStats = document.getElementById('heroStats');
+      heroPills.innerHTML = '';
+      heroStats.innerHTML = '';
+
+      [
+        `${schema.total_questions} items`,
+        schema.question_type.replaceAll('_', ' '),
+        `${schema.passing_score_percent}% passing`,
+        schema.source_file
+      ].forEach(text => {
+        const pill = document.createElement('span');
+        pill.className = 'pill';
+        pill.textContent = text;
+        heroPills.appendChild(pill);
+      });
+
+      const topics = [...new Set(schema.questions.map(question => question.topic))];
+      [
+        ['Topics', String(topics.length)],
+        ['Schema Version', schema.schema_version],
+        ['Shuffle Questions', schema.shuffle_questions ? 'Yes' : 'No'],
+        ['Show Explanations', schema.rendering_hints_for_codex.show_explanations_after_submit ? 'Yes' : 'No']
+      ].forEach(([label, value]) => {
+        const stat = document.createElement('div');
+        stat.className = 'stat';
+        stat.innerHTML = `<strong>${value}</strong><span>${label}</span>`;
+        heroStats.appendChild(stat);
+      });
+    }
+
+    function buildTopicOptions() {
+      const topics = [...new Set(schema.questions.map(question => question.topic))].sort((a, b) => a.localeCompare(b));
+      topics.forEach(topic => {
+        const option = document.createElement('option');
+        option.value = topic;
+        option.textContent = topic;
+        topicFilter.appendChild(option);
+      });
+    }
+
+    function updateScoreboard() {
+      const visibleIds = currentQuestions.map(question => question.id);
+      const answeredVisible = visibleIds.filter(id => answers.has(id));
+      const correctVisible = answeredVisible.filter(id => {
+        const question = currentQuestions.find(entry => entry.id === id);
+        return question && answers.get(id) === question.correct_choice_index;
+      });
+      const answeredCount = answeredVisible.length;
+      const correctCount = correctVisible.length;
+      const totalCount = currentQuestions.length;
+      const remainingCount = Math.max(totalCount - answeredCount, 0);
+      const accuracy = answeredCount ? Math.round((correctCount / answeredCount) * 100) : 0;
+
+      document.getElementById('answeredCount').textContent = String(answeredCount);
+      document.getElementById('correctCount').textContent = String(correctCount);
+      document.getElementById('accuracyValue').textContent = `${accuracy}%`;
+      document.getElementById('remainingCount').textContent = String(remainingCount);
+      document.getElementById('progressFill').style.width = totalCount ? `${(answeredCount / totalCount) * 100}%` : '0%';
+      document.getElementById('progressCopy').textContent = `${answeredCount} of ${totalCount} questions answered.`;
+    }
+
+    function createChoice(question, choiceText, index) {
+      const button = document.createElement('button');
+      button.className = 'choice';
+      button.type = 'button';
+      button.textContent = choiceText;
+
+      const selectedIndex = answers.get(question.id);
+      if (selectedIndex === index) button.classList.add('selected');
+      if (selectedIndex !== undefined) {
+        if (index === question.correct_choice_index) {
+          button.classList.add('correct');
+        } else if (selectedIndex === index && selectedIndex !== question.correct_choice_index) {
+          button.classList.add('incorrect');
+        }
+      }
+
+      button.addEventListener('click', () => {
+        answers.set(question.id, index);
+        renderQuestions();
+      });
+
+      return button;
+    }
+
+    function createQuestionCard(question, displayIndex) {
+      const selectedIndex = answers.get(question.id);
+      const isAnswered = selectedIndex !== undefined;
+      const isCorrect = selectedIndex === question.correct_choice_index;
+
+      const card = document.createElement('article');
+      card.className = 'question-card';
+      card.innerHTML = `
+        <div class="question-top">
+          <div>
+            <div class="question-meta question-id">Q${String(question.id).padStart(2, '0')} · ${displayIndex + 1}</div>
+            <div class="meta-line">Pages: ${question.source_pages.join(', ')}</div>
+          </div>
+          <div class="tag">${question.topic}</div>
+        </div>
+        <div class="question-text">${question.question}</div>
+      `;
+
+      const choicesWrap = document.createElement('div');
+      choicesWrap.className = 'choices';
+      question.choices.forEach((choice, index) => choicesWrap.appendChild(createChoice(question, choice, index)));
+
+      const actions = document.createElement('div');
+      actions.className = 'actions';
+
+      const revealButton = document.createElement('button');
+      revealButton.className = 'action-button';
+      revealButton.type = 'button';
+      revealButton.textContent = isAnswered ? 'Answered' : 'Reveal Answer';
+      revealButton.addEventListener('click', () => {
+        answers.set(question.id, question.correct_choice_index);
+        renderQuestions();
+      });
+
+      const clearButton = document.createElement('button');
+      clearButton.className = 'action-button';
+      clearButton.type = 'button';
+      clearButton.textContent = 'Clear';
+      clearButton.addEventListener('click', () => {
+        answers.delete(question.id);
+        renderQuestions();
+      });
+
+      actions.append(revealButton, clearButton);
+
+      const status = document.createElement('div');
+      status.className = `status-box ${isAnswered ? 'visible' : ''} ${isCorrect ? 'correct' : 'incorrect'}`;
+      if (isAnswered) {
+        status.innerHTML = `
+          <div class="status-title">${isCorrect ? 'Correct answer locked in.' : 'Not quite.'}</div>
+          <div class="status-copy">Correct answer: <strong>${question.choices[question.correct_choice_index]}</strong></div>
+          <div class="explanation">${question.explanation}</div>
+        `;
+      }
+
+      card.append(choicesWrap, actions, status);
+      return card;
+    }
+
+    function renderQuestions() {
+      questionList.innerHTML = '';
+      if (!currentQuestions.length) {
+        const empty = document.createElement('div');
+        empty.className = 'empty-state';
+        empty.textContent = 'No questions match the selected topic.';
+        questionList.appendChild(empty);
+        updateScoreboard();
+        return;
+      }
+
+      currentQuestions.forEach((question, index) => {
+        questionList.appendChild(createQuestionCard(question, index));
+      });
+      updateScoreboard();
+    }
+
+    function applyFilters() {
+      if (!schema) return;
+      const topic = topicFilter.value;
+      const order = sortMode.value;
+      let filtered = [...schema.questions];
+      if (topic !== 'all') filtered = filtered.filter(question => question.topic === topic);
+      currentQuestions = order === 'shuffle' ? shuffleArray(filtered) : filtered;
+      renderQuestions();
+    }
+
+    async function loadSchema() {
+      try {
+        const response = await fetch('BSIT-OOP-Chapter-08-50-item-quiz-schema.txt');
+        if (!response.ok) throw new Error(`HTTP ${response.status}`);
+        const rawText = await response.text();
+        schema = normalizeSchema(JSON.parse(rawText));
+        currentQuestions = [...schema.questions];
+        renderSummary();
+        buildTopicOptions();
+        renderQuestions();
+      } catch (error) {
+        questionList.innerHTML = `<div class="empty-state">Unable to load the OOP quiz schema. ${repairText(error.message)}</div>`;
+        document.getElementById('progressCopy').textContent = 'Schema load failed.';
+      }
+    }
+
+    document.getElementById('applyFilters').addEventListener('click', applyFilters);
+    document.getElementById('resetProgress').addEventListener('click', () => {
+      answers.clear();
+      renderQuestions();
+    });
+
+    loadSchema();
+
+    (function() {
+      const canvas = document.getElementById('cursorCanvas');
+      const ctx = canvas.getContext('2d');
+      const points = [];
+      const mouse = { x: window.innerWidth / 2, y: window.innerHeight / 2 };
+      const cols = 7;
+      const rows = 4;
+
+      function resize() {
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+        initPoints();
+      }
+
+      function initPoints() {
+        points.length = 0;
+        for (let row = 0; row < rows; row += 1) {
+          for (let col = 0; col < cols; col += 1) {
+            const x = ((col + 0.5) * canvas.width) / cols + (Math.random() - 0.5) * 80;
+            const y = ((row + 0.5) * canvas.height) / rows + (Math.random() - 0.5) * 60;
+            points.push({ x, y, r: 1.5 + Math.random() * 1.6 });
+          }
+        }
+      }
+
+      function draw() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        points.forEach(point => {
+          const dx = mouse.x - point.x;
+          const dy = mouse.y - point.y;
+          const dist = Math.hypot(dx, dy);
+          const strength = Math.max(0, 1 - dist / 420);
+          if (strength > 0.02) {
+            ctx.strokeStyle = `rgba(0,212,255,${0.18 * strength})`;
+            ctx.lineWidth = 1;
+            ctx.beginPath();
+            ctx.moveTo(point.x, point.y);
+            ctx.lineTo(mouse.x - dx * 0.1, mouse.y - dy * 0.1);
+            ctx.stroke();
+          }
+          ctx.save();
+          ctx.shadowColor = 'rgba(0,212,255,0.9)';
+          ctx.shadowBlur = 14 * strength + 2;
+          ctx.fillStyle = `rgba(0,212,255,${0.35 + strength * 0.35})`;
+          ctx.beginPath();
+          ctx.arc(point.x, point.y, point.r + strength * 1.1, 0, Math.PI * 2);
+          ctx.fill();
+          ctx.restore();
+        });
+        requestAnimationFrame(draw);
+      }
+
+      window.addEventListener('mousemove', event => {
+        mouse.x = event.clientX;
+        mouse.y = event.clientY;
+      });
+      window.addEventListener('resize', resize);
+      resize();
+      draw();
+    })();
+  </script>
+</body>
+</html>

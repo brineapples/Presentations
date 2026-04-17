@@ -1,0 +1,845 @@
+{
+  "schema_version": "1.0",
+  "schema_type": "quiz_data",
+  "format_note": "This is valid JSON saved inside a .txt file so it can be pasted into Codex or another code generator.",
+  "quiz_title": "BSIT OOP Chapter 08 - JavaFX 50-Item Quiz",
+  "source_file": "BSIT-OOP-Chapter-08.pdf",
+  "question_type": "multiple_choice_single_answer",
+  "total_questions": 50,
+  "shuffle_questions": false,
+  "shuffle_choices": false,
+  "passing_score_percent": 70,
+  "instructions": [
+    "Read each question carefully.",
+    "Choose one best answer.",
+    "Use the correct_choice_index field for scoring.",
+    "Each question includes topic, explanation, and source_pages for traceability."
+  ],
+  "rendering_hints_for_codex": {
+    "layout": "one question at a time or full list",
+    "show_score_after_submit": true,
+    "show_correct_answers_after_submit": true,
+    "show_explanations_after_submit": true,
+    "progress_bar": true,
+    "allow_retry": true
+  },
+  "questions": [
+    {
+      "id": 1,
+      "topic": "Intro to JavaFX",
+      "source_pages": [
+        4
+      ],
+      "question": "JavaFX is best described as ________.",
+      "choices": [
+        "a GUI toolkit for Java",
+        "a database management system for Java",
+        "a Java compiler extension",
+        "a command-line shell for Java"
+      ],
+      "correct_choice_index": 0,
+      "explanation": "The slides define JavaFX as a GUI toolkit for Java."
+    },
+    {
+      "id": 2,
+      "topic": "Intro to JavaFX",
+      "source_pages": [
+        4,
+        7
+      ],
+      "question": "Which set contains controls explicitly listed in the slides as available in JavaFX?",
+      "choices": [
+        "Labels, buttons, text boxes, check boxes, and drop-down lists",
+        "Routers, switches, hubs, and repeaters",
+        "Stacks, queues, trees, and graphs",
+        "Tablespaces, indexes, triggers, and views"
+      ],
+      "correct_choice_index": 0,
+      "explanation": "The slides list labels, buttons, text boxes, check boxes, and drop-down lists as controls."
+    },
+    {
+      "id": 3,
+      "topic": "Intro to JavaFX",
+      "source_pages": [
+        5
+      ],
+      "question": "Which of the following is presented as an advanced JavaFX feature?",
+      "choices": [
+        "Lighting, perspective, and animation effects",
+        "Packet sniffing and firewall rules",
+        "SQL joins and stored procedures",
+        "Kernel scheduling and paging"
+      ],
+      "correct_choice_index": 0,
+      "explanation": "The introductory slides mention lighting, perspective, and animation effects."
+    },
+    {
+      "id": 4,
+      "topic": "Intro to JavaFX",
+      "source_pages": [
+        5
+      ],
+      "question": "According to the slides, JavaFX is the ________ of the Swing API.",
+      "choices": [
+        "successor",
+        "predecessor",
+        "replacement library for JDBC",
+        "debugger"
+      ],
+      "correct_choice_index": 0,
+      "explanation": "The slides say JavaFX is the successor to the Swing API."
+    },
+    {
+      "id": 5,
+      "topic": "Styling and Capabilities",
+      "source_pages": [
+        8
+      ],
+      "question": "The slides say CSS in JavaFX can be used to customize which of the following?",
+      "choices": [
+        "Fonts, colors, sizes, backgrounds, gradients, and borders",
+        "Bytecode, class loaders, and JVM opcodes",
+        "Database schemas and transaction logs",
+        "IP addresses and subnet masks"
+      ],
+      "correct_choice_index": 0,
+      "explanation": "The CSS slide lists fonts, colors, sizes, backgrounds, gradients, and borders."
+    },
+    {
+      "id": 6,
+      "topic": "Styling and Capabilities",
+      "source_pages": [
+        9
+      ],
+      "question": "Which statement matches the slide on advanced JavaFX capabilities?",
+      "choices": [
+        "Property bindings allow automatic UI updates when data changes.",
+        "JavaFX supports only text-based console output.",
+        "JavaFX cannot display charts or 3D objects.",
+        "JavaFX has no support for touch interfaces."
+      ],
+      "correct_choice_index": 0,
+      "explanation": "The slides specifically mention property bindings as automatic UI updates when data changes."
+    },
+    {
+      "id": 7,
+      "topic": "Click Me Program",
+      "source_pages": [
+        10,
+        11
+      ],
+      "question": "What basic pattern does the Click Me program demonstrate?",
+      "choices": [
+        "Create a user interface, respond to user input, and update the display.",
+        "Compile source code, install drivers, and reboot the machine.",
+        "Create a database, normalize tables, and build indexes.",
+        "Encrypt files, transmit packets, and monitor bandwidth."
+      ],
+      "correct_choice_index": 0,
+      "explanation": "The explanatory slide says many JavaFX programs follow this pattern."
+    },
+    {
+      "id": 8,
+      "topic": "JavaFX Packages",
+      "source_pages": [
+        13
+      ],
+      "question": "Which package contains the core Application class for JavaFX apps?",
+      "choices": [
+        "javafx.application",
+        "javafx.scene.control",
+        "javafx.scene.layout",
+        "javafx.stage.style"
+      ],
+      "correct_choice_index": 0,
+      "explanation": "The package slide identifies javafx.application as the package for the core Application class."
+    },
+    {
+      "id": 9,
+      "topic": "JavaFX Packages",
+      "source_pages": [
+        13
+      ],
+      "question": "Which package contains the Stage class, described as the top-level window container?",
+      "choices": [
+        "javafx.stage",
+        "javafx.scene",
+        "javafx.event",
+        "javafx.application"
+      ],
+      "correct_choice_index": 0,
+      "explanation": "The slides identify javafx.stage as the package containing Stage."
+    },
+    {
+      "id": 10,
+      "topic": "JavaFX Packages",
+      "source_pages": [
+        13
+      ],
+      "question": "Which package is used for layout managers that position controls?",
+      "choices": [
+        "javafx.scene.layout",
+        "javafx.scene.control",
+        "javafx.application",
+        "javafx.stage"
+      ],
+      "correct_choice_index": 0,
+      "explanation": "The slides say javafx.scene.layout contains layout managers."
+    },
+    {
+      "id": 11,
+      "topic": "Application Class",
+      "source_pages": [
+        14
+      ],
+      "question": "A JavaFX application class normally extends which class?",
+      "choices": [
+        "javafx.application.Application",
+        "javafx.scene.Scene",
+        "javafx.stage.Stage",
+        "javafx.event.Event"
+      ],
+      "correct_choice_index": 0,
+      "explanation": "The slide on extending the Application class gives this exact inheritance."
+    },
+    {
+      "id": 12,
+      "topic": "Application Class",
+      "source_pages": [
+        14
+      ],
+      "question": "If the javafx.application package is not imported, how can the Application class be referenced?",
+      "choices": [
+        "By using the fully qualified name javafx.application.Application",
+        "By writing only ApplicationClass",
+        "By replacing it with Scene",
+        "By importing java.lang.Application"
+      ],
+      "correct_choice_index": 0,
+      "explanation": "The slides show the fully qualified name as the alternative."
+    },
+    {
+      "id": 13,
+      "topic": "Application Lifecycle",
+      "source_pages": [
+        15
+      ],
+      "question": "Which lifecycle method is described as optional and used for pre-UI setup?",
+      "choices": [
+        "init",
+        "render",
+        "build",
+        "paint"
+      ],
+      "correct_choice_index": 0,
+      "explanation": "The lifecycle slide says init is optional and used for pre-UI setup."
+    },
+    {
+      "id": 14,
+      "topic": "Application Lifecycle",
+      "source_pages": [
+        15,
+        17
+      ],
+      "question": "According to the slides, which sequence is part of the JavaFX application lifecycle after an instance is created?",
+      "choices": [
+        "Call init, call start, wait for the app to run, then call stop.",
+        "Call stop, call init, compile the program, then call start.",
+        "Open the database, call main, then skip start.",
+        "Run garbage collection, then call render and close."
+      ],
+      "correct_choice_index": 0,
+      "explanation": "The slides summarize the lifecycle as init, start, run, and stop."
+    },
+    {
+      "id": 15,
+      "topic": "Launching the Application",
+      "source_pages": [
+        16
+      ],
+      "question": "What is identified as the standard entry-point for Java programs?",
+      "choices": [
+        "the main method",
+        "the init method",
+        "the handle method",
+        "the stop method"
+      ],
+      "correct_choice_index": 0,
+      "explanation": "The launching slide says the standard entry-point is the main method."
+    },
+    {
+      "id": 16,
+      "topic": "Launching the Application",
+      "source_pages": [
+        16,
+        18
+      ],
+      "question": "Which statement about launch(args) is stated in the slides?",
+      "choices": [
+        "It is static and can be called from the static main method.",
+        "It must be called only from a constructor.",
+        "It replaces the start method.",
+        "It can only be called after show()."
+      ],
+      "correct_choice_index": 0,
+      "explanation": "The slides say the launch method is static and can be called from main."
+    },
+    {
+      "id": 17,
+      "topic": "Launching the Application",
+      "source_pages": [
+        18
+      ],
+      "question": "In the console-output example, which text prints after the app window closes?",
+      "choices": [
+        "Finished",
+        "Launching JavaFX",
+        "Application started",
+        "Button clicked"
+      ],
+      "correct_choice_index": 0,
+      "explanation": "The slide explicitly says \"Finished\" prints after the app window closes."
+    },
+    {
+      "id": 18,
+      "topic": "Start Method",
+      "source_pages": [
+        19,
+        20
+      ],
+      "question": "What is the purpose of the start method in a JavaFX application?",
+      "choices": [
+        "To create the user interface",
+        "To install the JDK",
+        "To compile all imported packages",
+        "To close the primary stage automatically"
+      ],
+      "correct_choice_index": 0,
+      "explanation": "The slides say every JavaFX application must include a start method to create the UI."
+    },
+    {
+      "id": 19,
+      "topic": "Start Method",
+      "source_pages": [
+        20
+      ],
+      "question": "According to the start-method steps, what happens immediately after the layout pane is created and the button is added to it?",
+      "choices": [
+        "A scene is created and the layout pane is added to it.",
+        "The stage is closed.",
+        "The button text is deleted.",
+        "The package imports are removed."
+      ],
+      "correct_choice_index": 0,
+      "explanation": "The step list shows that creating the scene comes after creating the layout pane."
+    },
+    {
+      "id": 20,
+      "topic": "Start Method",
+      "source_pages": [
+        21
+      ],
+      "question": "Which statement about the start method is correct according to the slides?",
+      "choices": [
+        "It is not static and accepts a Stage parameter.",
+        "It is static and accepts no parameters.",
+        "It replaces the main method in all Java programs.",
+        "It is called only after stop()."
+      ],
+      "correct_choice_index": 0,
+      "explanation": "The additional-details slide says start is not static and accepts a Stage parameter."
+    },
+    {
+      "id": 21,
+      "topic": "Buttons",
+      "source_pages": [
+        22
+      ],
+      "question": "From which package does the Button class used in the Click Me program come?",
+      "choices": [
+        "javafx.scene.control",
+        "javafx.application",
+        "javafx.event",
+        "javafx.stage"
+      ],
+      "correct_choice_index": 0,
+      "explanation": "The slide on creating a button places Button in javafx.scene.control."
+    },
+    {
+      "id": 22,
+      "topic": "Buttons",
+      "source_pages": [
+        22
+      ],
+      "question": "Why is btn declared as a class variable outside the start method in the Click Me program?",
+      "choices": [
+        "So it can be accessed from multiple methods",
+        "So it becomes a package import",
+        "So it can replace the Scene object",
+        "So it automatically closes the stage"
+      ],
+      "correct_choice_index": 0,
+      "explanation": "The slides say btn is declared outside start to allow access from multiple methods."
+    },
+    {
+      "id": 23,
+      "topic": "Buttons",
+      "source_pages": [
+        23
+      ],
+      "question": "Which is an alternative way shown in the slides to set the button text?",
+      "choices": [
+        "Pass the text directly to the Button constructor",
+        "Call setScene on the button",
+        "Call setRoot on the button",
+        "Use getText with no constructor"
+      ],
+      "correct_choice_index": 0,
+      "explanation": "The slide shows btn = new Button(\"Click me please!\") as an alternative."
+    },
+    {
+      "id": 24,
+      "topic": "Buttons",
+      "source_pages": [
+        23
+      ],
+      "question": "According to the slides, the Button class extends the Control class, which is a subclass of ________.",
+      "choices": [
+        "javafx.scene.Node",
+        "javafx.stage.Stage",
+        "javafx.application.Application",
+        "javafx.event.ActionEvent"
+      ],
+      "correct_choice_index": 0,
+      "explanation": "The technical details say Control is a subclass of javafx.scene.Node."
+    },
+    {
+      "id": 25,
+      "topic": "Action Events",
+      "source_pages": [
+        24
+      ],
+      "question": "What type of event is triggered when the user clicks a button?",
+      "choices": [
+        "an action event",
+        "a window event",
+        "a compile event",
+        "a layout event"
+      ],
+      "correct_choice_index": 0,
+      "explanation": "The slide explicitly says that clicking a button triggers an action event."
+    },
+    {
+      "id": 26,
+      "topic": "Action Events",
+      "source_pages": [
+        24
+      ],
+      "question": "Which method is used to specify the method called when a button is clicked?",
+      "choices": [
+        "setOnAction",
+        "setOnScene",
+        "setOnStart",
+        "setOnStage"
+      ],
+      "correct_choice_index": 0,
+      "explanation": "The action-event slide uses btn.setOnAction(...)."
+    },
+    {
+      "id": 27,
+      "topic": "Lambda Expressions",
+      "source_pages": [
+        25
+      ],
+      "question": "In the lambda expression btn.setOnAction(e -> buttonClick());, what is e described as?",
+      "choices": [
+        "an ActionEvent object with event details",
+        "a Scene object",
+        "a Stage title string",
+        "a package name"
+      ],
+      "correct_choice_index": 0,
+      "explanation": "The lambda-expression slide says e is an ActionEvent object with event details."
+    },
+    {
+      "id": 28,
+      "topic": "Action Events",
+      "source_pages": [
+        26
+      ],
+      "question": "When the button text is currently \"Click me please!\", what does buttonClick() change it to?",
+      "choices": [
+        "You clicked me!",
+        "Click again later.",
+        "Button pressed.",
+        "JavaFX started."
+      ],
+      "correct_choice_index": 0,
+      "explanation": "The buttonClick method shown in the slides toggles the text to \"You clicked me!\"."
+    },
+    {
+      "id": 29,
+      "topic": "Examining Events",
+      "source_pages": [
+        27
+      ],
+      "question": "How do the slides define an event?",
+      "choices": [
+        "An object generated when the user interacts with a UI component",
+        "A package that stores layout managers",
+        "A method that automatically creates scenes",
+        "A type of database transaction"
+      ],
+      "correct_choice_index": 0,
+      "explanation": "The slides define an event as an object generated by user interaction with the UI."
+    },
+    {
+      "id": 30,
+      "topic": "Examining Events",
+      "source_pages": [
+        29
+      ],
+      "question": "What is an event source?",
+      "choices": [
+        "The object where the event originated",
+        "The root node of the scene",
+        "The title of the stage",
+        "The import statement for JavaFX"
+      ],
+      "correct_choice_index": 0,
+      "explanation": "The important-terms slide defines event source as the object where the event originated."
+    },
+    {
+      "id": 31,
+      "topic": "Examining Events",
+      "source_pages": [
+        29
+      ],
+      "question": "What is an event target?",
+      "choices": [
+        "The node the event is directed at, usually the control interacted with",
+        "A list of all imported packages",
+        "The method that closes the application",
+        "A special type of layout pane"
+      ],
+      "correct_choice_index": 0,
+      "explanation": "The slide defines the event target as the node the event is directed at."
+    },
+    {
+      "id": 32,
+      "topic": "Event Handlers",
+      "source_pages": [
+        30
+      ],
+      "question": "Event handlers implement the EventHandler interface with which single method?",
+      "choices": [
+        "handle",
+        "launch",
+        "display",
+        "center"
+      ],
+      "correct_choice_index": 0,
+      "explanation": "The event-handler slide shows void handle<T> as the single method."
+    },
+    {
+      "id": 33,
+      "topic": "Event Classes",
+      "source_pages": [
+        28
+      ],
+      "question": "Which event class is identified as the most common event type and is triggered by button clicks or the Enter key?",
+      "choices": [
+        "ActionEvent",
+        "WindowEvent",
+        "TouchEvent",
+        "MouseEvent"
+      ],
+      "correct_choice_index": 0,
+      "explanation": "The table says ActionEvent is triggered by button clicks or the Enter key and is the most common event type."
+    },
+    {
+      "id": 34,
+      "topic": "Event Classes",
+      "source_pages": [
+        28
+      ],
+      "question": "According to the slides, KeyEvent is a subclass of which event class?",
+      "choices": [
+        "InputEvent",
+        "WindowEvent",
+        "ActionEvent",
+        "StageEvent"
+      ],
+      "correct_choice_index": 0,
+      "explanation": "The event-class table says KeyEvent is a subclass of InputEvent."
+    },
+    {
+      "id": 35,
+      "topic": "Event Classes",
+      "source_pages": [
+        28
+      ],
+      "question": "Which event class is triggered when the window or stage status changes?",
+      "choices": [
+        "WindowEvent",
+        "TouchEvent",
+        "KeyEvent",
+        "ActionEvent"
+      ],
+      "correct_choice_index": 0,
+      "explanation": "The table says WindowEvent is triggered when the window (stage) status changes."
+    },
+    {
+      "id": 36,
+      "topic": "Handling Events",
+      "source_pages": [
+        31
+      ],
+      "question": "In the steps to handle events, what is the event source example used in the slides?",
+      "choices": [
+        "a button",
+        "a database table",
+        "a CSS file",
+        "a scene constructor"
+      ],
+      "correct_choice_index": 0,
+      "explanation": "The slides use a button as the example of an event source."
+    },
+    {
+      "id": 37,
+      "topic": "Handling Events",
+      "source_pages": [
+        32,
+        33,
+        34,
+        35
+      ],
+      "question": "Which of the following is one of the four techniques shown for creating an event handler?",
+      "choices": [
+        "Using a lambda expression",
+        "Using a SQL trigger",
+        "Using a network socket",
+        "Using a compiler directive"
+      ],
+      "correct_choice_index": 0,
+      "explanation": "The slides list lambda expression as one of the four techniques."
+    },
+    {
+      "id": 38,
+      "topic": "Handling Events",
+      "source_pages": [
+        36
+      ],
+      "question": "Which statement shows how a button event handler is registered in the slides?",
+      "choices": [
+        "btn.setOnAction(eventHandler);",
+        "btn.register(eventHandler);",
+        "btn.handle(eventHandler);",
+        "btn.setRoot(eventHandler);"
+      ],
+      "correct_choice_index": 0,
+      "explanation": "The registration step explicitly shows btn.setOnAction(eventHandler);"
+    },
+    {
+      "id": 39,
+      "topic": "Layout Panes",
+      "source_pages": [
+        37
+      ],
+      "question": "Why are layout panes needed in realistic JavaFX applications?",
+      "choices": [
+        "Because multiple controls must be positioned relative to each other",
+        "Because JavaFX cannot use scenes",
+        "Because buttons cannot exist inside windows",
+        "Because packages must be arranged alphabetically"
+      ],
+      "correct_choice_index": 0,
+      "explanation": "The slides say layout panes are needed to position multiple controls relative to each other."
+    },
+    {
+      "id": 40,
+      "topic": "Layout Panes",
+      "source_pages": [
+        37
+      ],
+      "question": "What is a layout pane according to the slides?",
+      "choices": [
+        "A container class for one or more UI elements",
+        "A replacement for the Application class",
+        "A method inside EventHandler",
+        "A database connection pool"
+      ],
+      "correct_choice_index": 0,
+      "explanation": "The slide defines a layout pane as a container class for one or more UI elements."
+    },
+    {
+      "id": 41,
+      "topic": "Layout Panes",
+      "source_pages": [
+        38
+      ],
+      "question": "How many types of layout panes does the slide say JavaFX provides in the javafx.scene.layout package?",
+      "choices": [
+        "8",
+        "5",
+        "4",
+        "10"
+      ],
+      "correct_choice_index": 0,
+      "explanation": "The slide explicitly says JavaFX provides 8 types."
+    },
+    {
+      "id": 42,
+      "topic": "Layout Panes",
+      "source_pages": [
+        38,
+        41
+      ],
+      "question": "Which layout pane divides its layout into the regions top, left, right, bottom, and center?",
+      "choices": [
+        "BorderPane",
+        "HBox",
+        "VBox",
+        "FlowPane"
+      ],
+      "correct_choice_index": 0,
+      "explanation": "Both slides identify BorderPane as the pane with those five regions."
+    },
+    {
+      "id": 43,
+      "topic": "Layout Panes",
+      "source_pages": [
+        39
+      ],
+      "question": "What does pane.setCenter(btn); do in the BorderPane example?",
+      "choices": [
+        "Places the button in the center region",
+        "Moves the stage to the center of the screen",
+        "Centers the window title",
+        "Centers all import statements"
+      ],
+      "correct_choice_index": 0,
+      "explanation": "The BorderPane example slide says it places btn in the center region."
+    },
+    {
+      "id": 44,
+      "topic": "Layout Panes",
+      "source_pages": [
+        40
+      ],
+      "question": "Which feature of layout panes is emphasized in the slides?",
+      "choices": [
+        "They automatically adjust element positions based on element size and available space.",
+        "They permanently lock the UI size.",
+        "They remove the need for scenes.",
+        "They convert buttons into stages."
+      ],
+      "correct_choice_index": 0,
+      "explanation": "The key-features slide says layout panes automatically adjust element positions."
+    },
+    {
+      "id": 45,
+      "topic": "Layout Panes",
+      "source_pages": [
+        41
+      ],
+      "question": "Which common JavaFX layout pane arranges nodes vertically in columns?",
+      "choices": [
+        "VBox",
+        "HBox",
+        "FlowPane",
+        "BorderPane"
+      ],
+      "correct_choice_index": 0,
+      "explanation": "The common-layout-panes slide defines VBox as arranging nodes vertically in columns."
+    },
+    {
+      "id": 46,
+      "topic": "Layout Panes",
+      "source_pages": [
+        43
+      ],
+      "question": "In the general procedure for creating layout panes, what is the final step listed?",
+      "choices": [
+        "Create a scene with the layout pane as root.",
+        "Delete the controls from the pane.",
+        "Replace the stage with an event handler.",
+        "Close the application."
+      ],
+      "correct_choice_index": 0,
+      "explanation": "The general-procedure slide ends with creating a scene using the layout pane as root."
+    },
+    {
+      "id": 47,
+      "topic": "Layout Panes",
+      "source_pages": [
+        46
+      ],
+      "question": "What do the slides say about combining layout panes?",
+      "choices": [
+        "Panes can be nested to any depth for precise layouts.",
+        "Only one pane can be used in a JavaFX app.",
+        "Combining panes is not allowed in BorderPane.",
+        "Panes cannot contain other panes."
+      ],
+      "correct_choice_index": 0,
+      "explanation": "The combining-layout-panes slide says panes can be nested to any depth."
+    },
+    {
+      "id": 48,
+      "topic": "Scene",
+      "source_pages": [
+        47,
+        48
+      ],
+      "question": "Which statement about a Scene is correct according to the slides?",
+      "choices": [
+        "It holds user-interface controls for interaction and is created with a root node.",
+        "It replaces the Application class in JavaFX.",
+        "It exists only when no layout pane is used.",
+        "It is the same thing as an event handler."
+      ],
+      "correct_choice_index": 0,
+      "explanation": "The Scene slides say the scene holds UI controls and is created with a root node."
+    },
+    {
+      "id": 49,
+      "topic": "Scene",
+      "source_pages": [
+        48,
+        49,
+        50
+      ],
+      "question": "Which item is required by all Scene constructors according to the slides?",
+      "choices": [
+        "a root node",
+        "a window title",
+        "an event target",
+        "a lambda expression"
+      ],
+      "correct_choice_index": 0,
+      "explanation": "The slides explicitly say all constructors require a root node."
+    },
+    {
+      "id": 50,
+      "topic": "Stage",
+      "source_pages": [
+        51,
+        52,
+        53,
+        54,
+        55,
+        57
+      ],
+      "question": "Which statement correctly describes the Stage in JavaFX based on the slides?",
+      "choices": [
+        "It is the topmost container for the UI, receives the scene with setScene, and can be shown with show().",
+        "It is the same as a Button and is placed inside a Scene.",
+        "It is only used for handling ActionEvent objects.",
+        "It cannot have a title or be resized."
+      ],
+      "correct_choice_index": 0,
+      "explanation": "The stage slides describe Stage as the topmost container and show setScene(...) and show() being used with it."
+    }
+  ]
+}
