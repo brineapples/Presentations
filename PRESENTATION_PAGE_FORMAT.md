@@ -58,8 +58,8 @@ If a section is diagram-heavy:
 ## Styling Rules
 
 - Keep the existing site’s visual direction:
-  - dark blue atmospheric background
-  - bright cyan accents
+  - black / charcoal atmospheric background
+  - neutral white/silver accents
   - layered glow effects
   - geometric grid overlays
   - bold, presentation-like typography

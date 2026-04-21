@@ -57,8 +57,8 @@ Match the HCI quiz pattern:
 ## Styling Rules
 
 - Reuse the same visual language:
-  - blue-black background
-  - cyan accent glow
+  - black/charcoal background
+  - neutral white/silver accent glow
   - DM Sans / Inter / DM Mono stack
   - glassy bordered cards
   - subtle animated particle/cursor background

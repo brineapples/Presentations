@@ -7,26 +7,26 @@
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&family=DM+Mono:wght@400;500&family=DM+Sans:wght@300;400;500;700&display=swap" rel="stylesheet">
 <style>
   :root {
-    --blue-950: #010713;
-    --blue-900: #020b18;
-    --blue-800: #061629;
-    --blue-700: #0a2540;
-    --blue-600: #0e3a60;
-    --blue-500: #1258a8;
-    --blue-400: #1e7fcb;
-    --blue-300: #41a3e8;
-    --blue-200: #7dc4f5;
-    --blue-100: #c0e2fc;
-    --blue-50: #e8f5ff;
-    --accent: #00d4ff;
-    --accent2: #0066ff;
+    --blue-950: #050505;
+    --blue-900: #080808;
+    --blue-800: #101010;
+    --blue-700: #1d1d1d;
+    --blue-600: #262626;
+    --blue-500: #333333;
+    --blue-400: #454545;
+    --blue-300: #666666;
+    --blue-200: #9a9a9a;
+    --blue-100: #d0d0d0;
+    --blue-50: #e8e8e8;
+    --accent: #e0e0e0;
+    --accent2: #b5b5b5;
     --green: #47d48f;
     --yellow: #ffd166;
     --red: #ff6b81;
-    --white: #f0f8ff;
-    --text-muted: rgba(160, 210, 255, 0.58);
-    --card-bg: rgba(6, 22, 41, 0.74);
-    --card-border: rgba(0, 212, 255, 0.14);
+    --white: #f2f2f2;
+    --text-muted: rgba(200, 200, 200, 0.58);
+    --card-bg: rgba(28, 28, 28, 0.74);
+    --card-border: rgba(255, 255, 255, 0.14);
   }
 
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -35,8 +35,8 @@
   body {
     font-family: 'DM Sans', sans-serif;
     background:
-      radial-gradient(circle at top left, rgba(0, 212, 255, 0.08), transparent 22%),
-      radial-gradient(circle at 85% 10%, rgba(0, 102, 255, 0.12), transparent 16%),
+      radial-gradient(circle at top left, rgba(255, 255, 255, 0.08), transparent 22%),
+      radial-gradient(circle at 85% 10%, rgba(180, 180, 180, 0.12), transparent 16%),
       var(--blue-900);
     color: var(--white);
     min-height: 100vh;
@@ -49,8 +49,8 @@
     position: fixed;
     inset: 0;
     background-image:
-      linear-gradient(rgba(0, 212, 255, 0.06) 1px, transparent 1px),
-      linear-gradient(90deg, rgba(0, 212, 255, 0.06) 1px, transparent 1px);
+      linear-gradient(rgba(255, 255, 255, 0.06) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255, 255, 255, 0.06) 1px, transparent 1px);
     background-size: 60px 60px;
     pointer-events: none;
     z-index: 1;
@@ -62,9 +62,9 @@
     z-index: 0;
     pointer-events: none;
     background:
-      radial-gradient(circle at 15% 10%, rgba(0, 212, 255, 0.12), transparent 18%),
-      radial-gradient(circle at 80% 20%, rgba(0, 102, 255, 0.1), transparent 16%),
-      radial-gradient(circle at 30% 85%, rgba(65, 163, 232, 0.08), transparent 22%);
+      radial-gradient(circle at 15% 10%, rgba(255, 255, 255, 0.12), transparent 18%),
+      radial-gradient(circle at 80% 20%, rgba(180, 180, 180, 0.1), transparent 16%),
+      radial-gradient(circle at 30% 85%, rgba(120, 120, 120, 0.08), transparent 22%);
   }
 
   .cursor-canvas {
@@ -86,7 +86,7 @@
   .glow-orb.a {
     width: 560px;
     height: 560px;
-    background: radial-gradient(circle, #0a3d8f 0%, transparent 70%);
+    background: radial-gradient(circle, #252525 0%, transparent 70%);
     top: -12%;
     left: -14%;
   }
@@ -94,7 +94,7 @@
   .glow-orb.b {
     width: 420px;
     height: 420px;
-    background: radial-gradient(circle, #00b4d8 0%, transparent 70%);
+    background: radial-gradient(circle, #bfbfbf 0%, transparent 70%);
     bottom: 4%;
     right: -10%;
   }
@@ -133,7 +133,7 @@
   .score-panel,
   .question-card,
   .source-panel {
-    background: rgba(6, 22, 41, 0.66);
+    background: rgba(28, 28, 28, 0.66);
     border: 1px solid var(--card-border);
     border-radius: 24px;
     backdrop-filter: blur(12px);
@@ -188,8 +188,8 @@
   .pill {
     padding: 0.5rem 0.8rem;
     border-radius: 999px;
-    border: 1px solid rgba(0, 212, 255, 0.2);
-    background: rgba(0, 212, 255, 0.06);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    background: rgba(255, 255, 255, 0.06);
     font-family: 'DM Mono', monospace;
     font-size: 0.68rem;
     letter-spacing: 0.08em;
@@ -215,8 +215,8 @@
 
   .summary-card {
     border-radius: 18px;
-    background: rgba(2, 11, 24, 0.58);
-    border: 1px solid rgba(0, 212, 255, 0.12);
+    background: rgba(12, 12, 12, 0.58);
+    border: 1px solid rgba(255, 255, 255, 0.12);
     padding: 1rem;
   }
 
@@ -265,8 +265,8 @@
   .field button {
     width: 100%;
     border-radius: 14px;
-    border: 1px solid rgba(0, 212, 255, 0.18);
-    background: rgba(2, 11, 24, 0.72);
+    border: 1px solid rgba(255, 255, 255, 0.18);
+    background: rgba(12, 12, 12, 0.72);
     color: var(--white);
     padding: 0.82rem 0.95rem;
     font: inherit;
@@ -274,13 +274,13 @@
 
   .field button {
     cursor: pointer;
-    background: linear-gradient(135deg, rgba(0, 212, 255, 0.12), rgba(0, 102, 255, 0.12));
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.12), rgba(180, 180, 180, 0.12));
     transition: transform 0.25s ease, border-color 0.25s ease;
   }
 
   .field button:hover {
     transform: translateY(-2px);
-    border-color: rgba(0, 212, 255, 0.34);
+    border-color: rgba(255, 255, 255, 0.34);
   }
 
   .score-grid {
@@ -293,8 +293,8 @@
   .score-stat {
     padding: 0.95rem;
     border-radius: 16px;
-    background: rgba(2, 11, 24, 0.62);
-    border: 1px solid rgba(0, 212, 255, 0.12);
+    background: rgba(12, 12, 12, 0.62);
+    border: 1px solid rgba(255, 255, 255, 0.12);
   }
 
   .score-stat strong {
@@ -363,8 +363,8 @@
   .topic-chip {
     padding: 0.38rem 0.68rem;
     border-radius: 999px;
-    background: rgba(0, 212, 255, 0.08);
-    border: 1px solid rgba(0, 212, 255, 0.14);
+    background: rgba(255, 255, 255, 0.08);
+    border: 1px solid rgba(255, 255, 255, 0.14);
     font-family: 'DM Mono', monospace;
     font-size: 0.64rem;
     letter-spacing: 0.08em;
@@ -390,8 +390,8 @@
     text-align: left;
     padding: 0.95rem 1rem;
     border-radius: 16px;
-    border: 1px solid rgba(0, 212, 255, 0.14);
-    background: rgba(2, 11, 24, 0.68);
+    border: 1px solid rgba(255, 255, 255, 0.14);
+    background: rgba(12, 12, 12, 0.68);
     color: var(--blue-100);
     cursor: pointer;
     transition: transform 0.2s ease, border-color 0.2s ease, background 0.2s ease;
@@ -401,12 +401,12 @@
 
   .choice:hover {
     transform: translateY(-1px);
-    border-color: rgba(0, 212, 255, 0.3);
+    border-color: rgba(255, 255, 255, 0.3);
   }
 
   .choice.selected {
-    border-color: rgba(0, 212, 255, 0.42);
-    background: rgba(0, 212, 255, 0.12);
+    border-color: rgba(255, 255, 255, 0.42);
+    background: rgba(255, 255, 255, 0.12);
     color: var(--white);
   }
 
@@ -432,8 +432,8 @@
   .question-actions button,
   .footer-actions button {
     border-radius: 14px;
-    border: 1px solid rgba(0, 212, 255, 0.18);
-    background: rgba(0, 212, 255, 0.06);
+    border: 1px solid rgba(255, 255, 255, 0.18);
+    background: rgba(255, 255, 255, 0.06);
     color: var(--white);
     padding: 0.78rem 1rem;
     cursor: pointer;
@@ -448,8 +448,8 @@
     margin-top: 0.95rem;
     border-radius: 16px;
     padding: 0.9rem 1rem;
-    background: rgba(2, 11, 24, 0.72);
-    border: 1px solid rgba(0, 212, 255, 0.12);
+    background: rgba(12, 12, 12, 0.72);
+    border: 1px solid rgba(255, 255, 255, 0.12);
     display: none;
   }
 
@@ -489,8 +489,8 @@
   .source-item {
     padding: 0.9rem 1rem;
     border-radius: 16px;
-    background: rgba(2, 11, 24, 0.58);
-    border: 1px solid rgba(0, 212, 255, 0.12);
+    background: rgba(12, 12, 12, 0.58);
+    border: 1px solid rgba(255, 255, 255, 0.12);
     color: var(--blue-100);
   }
 
@@ -975,7 +975,7 @@
           const strength = Math.max(0, 1 - dist / 420);
 
           if (strength > 0.02) {
-            ctx.strokeStyle = `rgba(0,212,255,${0.18 * strength})`;
+            ctx.strokeStyle = `rgba(255,255,255,${0.18 * strength})`;
             ctx.lineWidth = 1;
             ctx.beginPath();
             ctx.moveTo(point.x, point.y);
@@ -984,9 +984,9 @@
           }
 
           ctx.save();
-          ctx.shadowColor = 'rgba(0,212,255,0.9)';
+          ctx.shadowColor = 'rgba(255,255,255,0.9)';
           ctx.shadowBlur = 14 * strength + 2;
-          ctx.fillStyle = `rgba(0,212,255,${0.35 + strength * 0.35})`;
+          ctx.fillStyle = `rgba(255,255,255,${0.35 + strength * 0.35})`;
           ctx.beginPath();
           ctx.arc(point.x, point.y, point.r + strength * 1.1, 0, Math.PI * 2);
           ctx.fill();
