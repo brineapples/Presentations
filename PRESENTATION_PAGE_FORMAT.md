@@ -47,6 +47,7 @@ The manufacturer presentation should be treated as the standard, but with explic
 - make dense diagrams degrade gracefully instead of overflowing
 - move fixed side navigation into a bottom touch-friendly layout on mobile when needed
 - disable scroll-snap on small screens if it hurts usability
+- test from a mobile viewport whenever possible (Priority)
 
 If a section is diagram-heavy:
 
